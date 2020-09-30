@@ -1,0 +1,9 @@
+# Compiled class file
+*.class
+
+
+#Ignore Eclipse files
+target/*
+.settings/
+*.project
+*.classpath
