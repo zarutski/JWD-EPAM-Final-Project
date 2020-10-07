@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -30,7 +29,9 @@
      
      <fmt:message key="form_login" var="login_message"/>
      <fmt:message key="form_password" var="password_message"/>
-     <fmt:message key="authentification_error_message" var="authentification_error"/>
+     <fmt:message key="sign_in_message" var="sign_in"/>
+     <fmt:message key="authentication_error.01" var="authentification_error"/>
+     <fmt:message key="authentication_error.02" var="authentification_service_error"/>
 
 </head>
 
@@ -53,14 +54,19 @@
 				
 		<form action="controller" method="post">
 			<input type="hidden" name="command" value="authentication" />
-			${login_message}<br/>
-			<input type="text" name="login" value="" /><br/>
-			${password_message}<br/> 
-			<input type="password" name="password" value="" /><br /> 
-			<c:if test="${requestScope.error eq 'login or password error'}">
-				<p>${authentification_error}</p>
-			</c:if>
-			<input type="submit" value="Вход"/><br /> 
+			${login_message}<br/><input type="text" name="login" value="" /><br/>
+			${password_message}<br/><input type="password" name="password" value="" /><br/>
+			
+			<c:choose>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_01'}">
+					<p>${authentification_error}</p>
+				</c:when>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_02'}">
+					<p>${authentification_service_error}</p>
+				</c:when>
+			</c:choose>
+			
+			<input type="submit" value="${sign_in}"/><br /> 
 		</form>
 	</main>
 	

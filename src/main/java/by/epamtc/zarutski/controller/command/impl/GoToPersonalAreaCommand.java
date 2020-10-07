@@ -22,7 +22,6 @@ public class GoToPersonalAreaCommand implements Command{
 	
 	private static final String PERSONAL_AREA_PAGE = "/WEB-INF/jsp/personalArea.jsp";
     private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";
-    private static final String DEFAULT_PAGE = "/index.jsp";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,7 +42,7 @@ public class GoToPersonalAreaCommand implements Command{
         	userData = service.getUserData(userId, userRoleName);
 
             if (userData == null) {
-                request.setAttribute("error", "login or password error"); // может на error_page
+                request.setAttribute("error", "login or password error");
                 page = AUTHENTICATION_PAGE;
             } else {
                 request.setAttribute(PARAMETER_USER_DATA, userData);
@@ -53,9 +52,9 @@ public class GoToPersonalAreaCommand implements Command{
         } catch (ServiceException e) {
         	// TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
             request.setAttribute("error", "другое сообщение");
-            page = DEFAULT_PAGE;
+            page = AUTHENTICATION_PAGE;
         }
-		
+        
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
         dispatcher.forward(request, response);
 	}

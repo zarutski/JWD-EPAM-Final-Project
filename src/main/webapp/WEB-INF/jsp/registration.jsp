@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-
+<%@ page language="java" contentType="text/html; charset=utf-8"	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -9,6 +7,14 @@
 <head>
 	<meta charset="utf-8">
 	<title>Registration form</title>
+		<style>
+		#navbar {
+		  margin: 0;
+		  padding: 0;
+		  list-style-type: none;
+		}
+		#navbar li { display: inline; }
+	</style>
 	
 	<c:if test="${not empty sessionScope.local}">
         <fmt:setLocale value="${sessionScope.local}"/>
@@ -19,6 +25,9 @@
     <fmt:message key="registration_page_message" var="registration_message"/>
     <fmt:message key="app_description_name" var="app_description"/>
     <fmt:message key="main_page_link" var="main_link"/>
+    <fmt:message key="sign_in_message" var="sign_in"/>
+    <fmt:message key="sign_up_message" var="sign_up"/>
+    
     
     
     <fmt:message key="form_name" var="name_message"/>
@@ -34,6 +43,12 @@
     <fmt:message key="form_login" var="login_message"/>
     <fmt:message key="form_password" var="password_message"/>
     <fmt:message key="form_confirm_password" var="confirm_password_message"/>
+    
+    <fmt:message key="registration_error.11" var="registration_data_exists_error"/>
+    <fmt:message key="registration_error.12" var="registration_service_error"/>
+    <fmt:message key="registration_error.13" var="registration_data_format_error"/>
+    <fmt:message key="registration_error.14" var="user_exists_error"/>
+
 </head>
 <body>
 	
@@ -43,7 +58,12 @@
 	</header>
 
 	<main>
-		<a href="controller?command=go_to_main_page">${main_link}</a>
+	<nav>
+		<ul id="navbar">
+			<li><a href="controller?command=go_to_main_page">${main_link}</a></li>
+			<li><a href="controller?command=go_to_authentication_page">${sign_in}</a></li>
+		</ul>
+	</nav>
 
 		<form action="controller" method="post" accept-charset="utf-8">
 			<input type="hidden" name="command" value="registration" />
@@ -72,8 +92,24 @@
 			${password_message}<br/> 
 			<input type="password" name="password" value="" /><br />
 			${confirm_password_message}<br/> 
-			<input type="password" name="password" value="" /><br /> 
-			<input type="submit" value="регистрация"/><br /> 
+			<input type="password" name="confirm_password" value="" /><br />
+			
+			<c:choose>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_11'}">
+					<p>${registration_data_exists_error}</p>
+				</c:when>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_12'}">
+					<p>${registration_service_error}</p>
+				</c:when>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_13'}">
+					<p>${registration_data_format_error}</p>
+				</c:when>
+				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_14'}">
+					<p>${user_exists_error}</p>
+				</c:when>
+			</c:choose>
+			 
+			<input type="submit" value="${sign_up}"/><br /> 
 		</form>
 	</main>
 	

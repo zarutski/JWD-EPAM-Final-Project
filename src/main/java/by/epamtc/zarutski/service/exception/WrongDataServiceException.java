@@ -1,6 +1,6 @@
 package by.epamtc.zarutski.service.exception;
 
-public class WrongDataServiceException extends Exception {
+public class WrongDataServiceException extends ServiceException {
 
 	private static final long serialVersionUID = 6908480306900254215L;
 

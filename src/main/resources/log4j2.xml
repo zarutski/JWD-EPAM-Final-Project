@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} - %logger{10} [%level]: %msg %n%ex{3}%n"/>
+		</Console>
+		<RollingFile name="DAILY_LOG" 
+					 fileName="${sys:user.home}/log/daily.log"
+                	 filePattern="${sys:user.home}/log/%d{ddMMyyyy}_daily.log">
+      		<PatternLayout pattern="%d [%p] %c{10} - %msg%n %rEx{5}%n"/>
+      		<Policies>
+        		<TimeBasedTriggeringPolicy interval="1"/>
+      		</Policies>                               
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="DAILY_LOG"/>
+		</Root>
+	</Loggers>
+</Configuration>
