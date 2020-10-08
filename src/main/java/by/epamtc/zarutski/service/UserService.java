@@ -11,6 +11,5 @@ public interface UserService {
 
     boolean registration(RegistrationData registrationData) throws ServiceException;
 
-	UserData getUserData(int userId, String roleName) throws ServiceException;
-
+    UserData getUserData(int userId, String roleName) throws ServiceException;
 }

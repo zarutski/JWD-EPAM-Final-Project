@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 // пересмотреть
 public class CharsetFilter implements Filter {
 
-    private String ENCODING = "UTF-8";
+    private final String ENCODING = "UTF-8";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

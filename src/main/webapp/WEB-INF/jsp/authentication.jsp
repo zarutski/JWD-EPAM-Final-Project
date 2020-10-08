@@ -54,8 +54,8 @@
 				
 		<form action="controller" method="post">
 			<input type="hidden" name="command" value="authentication" />
-			${login_message}<br/><input type="text" name="login" value="" /><br/>
-			${password_message}<br/><input type="password" name="password" value="" /><br/>
+			${login_message}<br/><input type="text" name="login" value="" required/><br/>
+			${password_message}<br/><input type="password" name="password" value="" required/><br/>
 			
 			<c:choose>
 				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_01'}">

@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToAuthenticationCommand implements Command {
-	
-	private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";
-	
+
+    private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	RequestDispatcher dispatcher = request.getRequestDispatcher(AUTHENTICATION_PAGE);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(AUTHENTICATION_PAGE);
         dispatcher.forward(request, response);
     }
 }

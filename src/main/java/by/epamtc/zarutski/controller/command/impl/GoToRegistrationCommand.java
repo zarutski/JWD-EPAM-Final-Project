@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToRegistrationCommand implements Command {
-	
-	private static final String REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";
-	
+
+    private static final String REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTRATION_PAGE);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTRATION_PAGE);
         dispatcher.forward(request, response);
     }
 }

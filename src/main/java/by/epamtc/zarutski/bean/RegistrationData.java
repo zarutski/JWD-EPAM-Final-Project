@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class RegistrationData implements Serializable{
+public class RegistrationData implements Serializable {
 
-	private static final long serialVersionUID = 2770828135336584725L;
-	
-	private String login;
+    private static final long serialVersionUID = 2770828135336584725L;
+
+    private String login;
     private String password;
     private String email;
 

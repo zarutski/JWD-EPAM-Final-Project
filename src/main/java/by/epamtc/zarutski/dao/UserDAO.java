@@ -7,9 +7,9 @@ import by.epamtc.zarutski.bean.UserData;
 
 public interface UserDAO {
 
-	AuthenticationData authentication(String login, String password) throws DAOException;
+    AuthenticationData authentication(String login, String password) throws DAOException;
 
     boolean registration(RegistrationData registrationData) throws DAOException;
 
-	UserData getUserData(int userId, String roleName) throws DAOException;
+    UserData getUserData(int userId, String roleName) throws DAOException;
 }

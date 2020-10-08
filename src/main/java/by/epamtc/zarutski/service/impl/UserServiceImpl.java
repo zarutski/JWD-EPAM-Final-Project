@@ -36,34 +36,34 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        
+
         return authenticationData;
     }
 
     @Override
     public boolean registration(RegistrationData registrationData) throws ServiceException {
 
-    	if (!RegistrationParametersValidator.registrationDataValidation(registrationData)) {
+        if (!RegistrationParametersValidator.registrationDataValidation(registrationData)) {
             throw new WrongDataServiceException(WRONG_REGISTRATION_DATA_MESSAGE);
-    	}
-    	
+        }
+
         DAOProvider daoProvider = DAOProvider.getInstance();
         UserDAO userDAO = daoProvider.getUserDAO();
 
-		try {
-			return userDAO.registration(registrationData);
-		} catch (UserExistsDAOException e) {	
-			throw new UserExistsServiceException(e);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
+        try {
+            return userDAO.registration(registrationData);
+        } catch (UserExistsDAOException e) {
+            throw new UserExistsServiceException(e);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 
-	@Override
-	public UserData getUserData(int userId, String roleName)  throws ServiceException{
-		DAOProvider daoProvider = DAOProvider.getInstance();
+    @Override
+    public UserData getUserData(int userId, String roleName) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
         UserDAO userDAO = daoProvider.getUserDAO();
-        
+
         UserData userData = null;
         try {
             userData = userDAO.getUserData(userId, roleName);
@@ -72,5 +72,5 @@ public class UserServiceImpl implements UserService {
         }
 
         return userData;
-	}
+    }
 }

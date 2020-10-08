@@ -13,8 +13,8 @@ import by.epamtc.zarutski.controller.command.impl.GoToMainCommand;
 import by.epamtc.zarutski.controller.command.impl.GoToPersonalAreaCommand;
 
 public class CommandProvider {
-	
-	private Map<ParameterName, Command> commands = new HashMap<>();
+
+    private Map<ParameterName, Command> commands = new HashMap<>();
 
     public CommandProvider() {
         commands.put(ParameterName.AUTHENTICATION, new AuthenticationCommand());

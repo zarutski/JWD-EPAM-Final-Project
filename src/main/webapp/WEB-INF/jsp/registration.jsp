@@ -68,31 +68,31 @@
 		<form action="controller" method="post" accept-charset="utf-8">
 			<input type="hidden" name="command" value="registration" />
 			${name_message}<br/>
-			<input type="text" name="name" value="" /><br/>
+			<input type="text" name="name" value="" required/><br/>
 			${surname_message}<br/>
-			<input type="text" name="surname" value="" /><br/>
+			<input type="text" name="surname" value="" required/><br/>
 			${patronymic_message}<br/>
-			<input type="text" name="patronymic" value="" /><br/>
+			<input type="text" name="patronymic" value="" required/><br/>
 			${phone_number_message}<br/>
-			<input type="text" name="phone_number" value="" /><br/>
+			<input type="text" name="phone_number" value="" required/><br/>
 			${passport_serial_message}<br/>
-			<input type="text" name="passport_series" value="" /><br/>
+			<input type="text" name="passport_series" value="" required/><br/>
 			${passport_number_message}<br/>
-			<input type="text" name="passport_number" value="" /><br/>
+			<input type="text" name="passport_number" value="" required/><br/>
 			${date_of_birth_message}<br/>
-			<input type="text" name="date_of_birth" value="" /><br/>
+			<input type="text" name="date_of_birth" value="" required/><br/>
 			${address_message}<br/>
-			<input type="text" name="address" value="" /><br/>
+			<input type="text" name="address" value="" required/><br/>
 			${post_code_message}<br/>
-			<input type="text" name="post_code" value="" /><br/>
+			<input type="text" name="post_code" value="" required/><br/>
 			${email_message}<br/>
-			<input type="text" name="email" value="" /><br/>
+			<input type="text" name="email" value="" required/><br/>
 			${login_message}<br/>
-			<input type="text" name="login" value="" /><br/>
+			<input type="text" name="login" value="" required/><br/>
 			${password_message}<br/> 
-			<input type="password" name="password" value="" /><br />
+			<input type="password" name="password" value="" required/><br />
 			${confirm_password_message}<br/> 
-			<input type="password" name="confirm_password" value="" /><br />
+			<input type="password" name="confirm_password" value="" required/><br />
 			
 			<c:choose>
 				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_11'}">

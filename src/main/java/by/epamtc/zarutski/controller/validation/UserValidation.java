@@ -1,7 +1,6 @@
 package by.epamtc.zarutski.controller.validation;
 
 import by.epamtc.zarutski.bean.RegistrationData;
-
 import java.time.LocalDate;
 
 public class UserValidation {

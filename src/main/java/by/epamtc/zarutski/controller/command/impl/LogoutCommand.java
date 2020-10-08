@@ -15,8 +15,8 @@ public class LogoutCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	HttpSession session = request.getSession(false);
-    	
+        HttpSession session = request.getSession(false);
+
         if (session != null) {
             session.invalidate();
         }

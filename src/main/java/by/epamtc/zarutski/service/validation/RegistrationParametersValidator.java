@@ -26,10 +26,9 @@ public class RegistrationParametersValidator {
         String phoneNumber = data.getPhoneNumber();
         String passportSeries = data.getPassportSeries();
         String passportNumber = data.getPassportNumber();
-        String passport = passportSeries + passportNumber;        
-        
+        String passport = passportSeries + passportNumber;
+
         return email.matches(EMAIL_PATTERN) && password.matches(PASSWORD_PATTERN) && login.matches(LOGIN_PATTERN)
                 && phoneNumber.matches(PHONE_NUMBER_PATTERN) && passport.matches(PASSPORT_PATTERN);
     }
-
 }

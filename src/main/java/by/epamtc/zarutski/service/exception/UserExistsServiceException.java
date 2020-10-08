@@ -1,10 +1,10 @@
 package by.epamtc.zarutski.service.exception;
 
-public class UserExistsServiceException extends ServiceException{
+public class UserExistsServiceException extends ServiceException {
 
-	private static final long serialVersionUID = 8568186940728078297L;
+    private static final long serialVersionUID = 8568186940728078297L;
 
-	public UserExistsServiceException() {
+    public UserExistsServiceException() {
     }
 
     public UserExistsServiceException(String message) {

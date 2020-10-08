@@ -16,14 +16,14 @@ import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
 import by.epamtc.zarutski.service.exception.WrongDataServiceException;
 
-public class AuthenticationCommand implements Command{
-	
-	private static final Logger logger = LogManager.getLogger(AuthenticationCommand.class);
-	
-	private static final String PARAMETER_LOGIN = "login";
+public class AuthenticationCommand implements Command {
+
+    private static final Logger logger = LogManager.getLogger(AuthenticationCommand.class);
+
+    private static final String PARAMETER_LOGIN = "login";
     private static final String PARAMETER_PASSWORD = "password";
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
-    
+
     private static final String AMPERSAND = "&";
     private static final String PARAMETER_AUTHENTICATION_ERROR = "error=error_01";
     private static final String PARAMETER_SERVICE_ERROR = "error=error_02";
@@ -32,23 +32,23 @@ public class AuthenticationCommand implements Command{
     private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
-    	
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         ServiceProvider provider = ServiceProvider.getInstance();
         UserService service = provider.getUserService();
-        
+
         String login = request.getParameter(PARAMETER_LOGIN);
         String password = request.getParameter(PARAMETER_PASSWORD);
 
         AuthenticationData authenticationData = null;
         HttpSession session;
         String page;
-                
+
         try {
             authenticationData = service.authentication(login, password);
 
             if (authenticationData == null) {
-            	page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
+                page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
             } else {
                 session = request.getSession();
                 session.setAttribute(PARAMETER_AUTHENTICATION_DATA, authenticationData);
@@ -57,8 +57,8 @@ public class AuthenticationCommand implements Command{
             }
 
         } catch (WrongDataServiceException e) {
-        	logger.info("Authentication data format isn't correct", e);
-        	page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
+            logger.info("Authentication data format isn't correct", e);
+            page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
         } catch (ServiceException e) {
             page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_SERVICE_ERROR;
         }

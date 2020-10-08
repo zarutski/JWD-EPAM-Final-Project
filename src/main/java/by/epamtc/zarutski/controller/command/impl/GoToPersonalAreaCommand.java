@@ -15,31 +15,31 @@ import by.epamtc.zarutski.service.ServiceProvider;
 import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
 
-public class GoToPersonalAreaCommand implements Command{
-	
-	private static final String PARAMETER_USER_DATA = "user_data";
-	private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
-	
-	private static final String PERSONAL_AREA_PAGE = "/WEB-INF/jsp/personalArea.jsp";
+public class GoToPersonalAreaCommand implements Command {
+
+    private static final String PARAMETER_USER_DATA = "user_data";
+    private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
+
+    private static final String PERSONAL_AREA_PAGE = "/WEB-INF/jsp/personalArea.jsp";
     private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";
 
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider provider = ServiceProvider.getInstance();
         UserService service = provider.getUserService();
-        
+
         // валидации
         HttpSession session = request.getSession();
-        AuthenticationData authenticationData = (AuthenticationData)session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
+        AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
         int userId = authenticationData.getUserId();
-        String userRoleName =  authenticationData.getUserRole();
+        String userRoleName = authenticationData.getUserRole();
 
-        
+
         UserData userData = null;
         String page;
         try {
-        	userData = service.getUserData(userId, userRoleName);
+            userData = service.getUserData(userId, userRoleName);
 
             if (userData == null) {
                 request.setAttribute("error", "login or password error");
@@ -50,12 +50,12 @@ public class GoToPersonalAreaCommand implements Command{
             }
 
         } catch (ServiceException e) {
-        	// TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
+            // TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
             request.setAttribute("error", "другое сообщение");
             page = AUTHENTICATION_PAGE;
         }
-        
-		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher(page);
         dispatcher.forward(request, response);
-	}
+    }
 }

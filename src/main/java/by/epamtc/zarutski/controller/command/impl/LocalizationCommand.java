@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LocalizationCommand implements Command {
 
-	private final static String PARAMETER_LOCALE = "local";
+    private final static String PARAMETER_LOCALE = "local";
     private final static String PARAMETER_PREVIOUS_COMMAND = "previous_command";
     private static final String GO_TO_COMMAND = "controller?command=";
 

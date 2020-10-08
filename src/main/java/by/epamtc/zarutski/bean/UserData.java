@@ -6,9 +6,9 @@ import java.util.Objects;
 
 public class UserData implements Serializable {
 
-	private static final long serialVersionUID = 6899855851114675364L;
-	
-	private int userId;
+    private static final long serialVersionUID = 6899855851114675364L;
+
+    private int userId;
     private String email;
     private String name;
     private String surname;
@@ -21,7 +21,6 @@ public class UserData implements Serializable {
     private String postCode;
     private String photoLink;
     private String roleName;
-
 
     public UserData() {
     }

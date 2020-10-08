@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.epamtc.zarutski.controller.command.Command;
 
-public class GoToMainCommand implements Command{
-	
-	private static final String GO_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
+public class GoToMainCommand implements Command {
 
-	@Override
+    private static final String GO_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
+
+    @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher(GO_TO_MAIN_PAGE);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(GO_TO_MAIN_PAGE);
         dispatcher.forward(request, response);
     }
 }
