@@ -3,18 +3,18 @@
 		 xmlns="http://java.sun.com/xml/ns/javaee" 
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
 		 id="WebApp_ID" version="2.5">
-  <display-name>my-web-app</display-name>
+	<display-name>my-web-app</display-name>
 
-  <servlet>
-  	<servlet-name>controller</servlet-name>
-  	<servlet-class>by.epamtc.zarutski.controller.Controller</servlet-class>
-  </servlet>
-      <servlet-mapping>
-  	<servlet-name>controller</servlet-name>
-  	<url-pattern>/controller</url-pattern>
-  </servlet-mapping>
+	<servlet>
+  		<servlet-name>controller</servlet-name>
+  		<servlet-class>by.epamtc.zarutski.controller.Controller</servlet-class>
+	</servlet>
+	<servlet-mapping>
+  		<servlet-name>controller</servlet-name>
+  		<url-pattern>/controller</url-pattern>
+	</servlet-mapping>
   
-  <filter>
+	<filter>
 		<filter-name>CharsetFilter</filter-name>
 		<filter-class>by.epamtc.zarutski.controller.filter.CharsetFilter</filter-class>
 		<init-param>

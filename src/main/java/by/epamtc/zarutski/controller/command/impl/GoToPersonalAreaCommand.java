@@ -32,26 +32,31 @@ public class GoToPersonalAreaCommand implements Command {
         // валидации
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
-        int userId = authenticationData.getUserId();
-        String userRoleName = authenticationData.getUserRole();
-
-
-        UserData userData = null;
         String page;
-        try {
-            userData = service.getUserData(userId, userRoleName);
 
-            if (userData == null) {
-                request.setAttribute("error", "login or password error");
+        if (authenticationData != null) {
+            int userId = authenticationData.getUserId();
+            String userRoleName = authenticationData.getUserRole();
+
+            UserData userData = null;
+            try {
+                userData = service.getUserData(userId, userRoleName);
+
+                if (userData == null) {
+                    request.setAttribute("error", "login or password error");
+                    page = AUTHENTICATION_PAGE;
+                } else {
+                    request.setAttribute(PARAMETER_USER_DATA, userData);
+                    page = PERSONAL_AREA_PAGE;
+                }
+
+            } catch (ServiceException e) {
+                // TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
+                request.setAttribute("error", "другое сообщение");
                 page = AUTHENTICATION_PAGE;
-            } else {
-                request.setAttribute(PARAMETER_USER_DATA, userData);
-                page = PERSONAL_AREA_PAGE;
             }
-
-        } catch (ServiceException e) {
-            // TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
-            request.setAttribute("error", "другое сообщение");
+        } else {
+            // TODO log
             page = AUTHENTICATION_PAGE;
         }
 

@@ -3,14 +3,7 @@ package by.epamtc.zarutski.controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.epamtc.zarutski.controller.command.impl.AuthenticationCommand;
-import by.epamtc.zarutski.controller.command.impl.GoToAuthenticationCommand;
-import by.epamtc.zarutski.controller.command.impl.GoToRegistrationCommand;
-import by.epamtc.zarutski.controller.command.impl.LocalizationCommand;
-import by.epamtc.zarutski.controller.command.impl.LogoutCommand;
-import by.epamtc.zarutski.controller.command.impl.RegistrationCommand;
-import by.epamtc.zarutski.controller.command.impl.GoToMainCommand;
-import by.epamtc.zarutski.controller.command.impl.GoToPersonalAreaCommand;
+import by.epamtc.zarutski.controller.command.impl.*;
 
 public class CommandProvider {
 
@@ -25,6 +18,10 @@ public class CommandProvider {
         commands.put(ParameterName.GO_TO_REGISTRATION_PAGE, new GoToRegistrationCommand());
         commands.put(ParameterName.GO_TO_PERSONAL_AREA, new GoToPersonalAreaCommand());
         commands.put(ParameterName.GO_TO_AUTHENTICATION_PAGE, new GoToAuthenticationCommand());
+        commands.put(ParameterName.GO_TO_CARDS, new GoToCardsCommand());
+        commands.put(ParameterName.GO_TO_ACCOUNTS, new GoToAccountsCommand());
+        commands.put(ParameterName.GO_TO_PAYMENTS, new GoToPaymentsCommand());
+        commands.put(ParameterName.GO_TO_SEARCH_USER, new GoToSearchUserCommand());
     }
 
     public Command getCommand(String commandName) {

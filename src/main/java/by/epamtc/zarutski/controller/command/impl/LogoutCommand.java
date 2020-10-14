@@ -7,10 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 
 public class LogoutCommand implements Command {
 
+	private static final Logger logger = LogManager.getLogger(LogoutCommand.class);
+	
     public static final String MAIN_PAGE = "controller?command=go_to_main_page";
 
     @Override
@@ -19,6 +24,7 @@ public class LogoutCommand implements Command {
 
         if (session != null) {
             session.invalidate();
+            logger.info("user logged out");
         }
         response.sendRedirect(MAIN_PAGE);
     }

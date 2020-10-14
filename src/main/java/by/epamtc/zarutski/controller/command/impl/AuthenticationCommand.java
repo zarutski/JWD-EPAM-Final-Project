@@ -53,7 +53,7 @@ public class AuthenticationCommand implements Command {
                 session = request.getSession();
                 session.setAttribute(PARAMETER_AUTHENTICATION_DATA, authenticationData);
                 logger.info("User authenticated successfully");
-                page = GO_TO_PESONAL_AREA;
+                page = GO_TO_PESONAL_AREA; 
             }
 
         } catch (WrongDataServiceException e) {

@@ -92,6 +92,7 @@ public class SQLUserDAOImpl implements UserDAO {
                 String fetchedPassword = resultSet.getString(DB_USER_PASSWORD);
                 String hashedPassword = hashPassword(password, fetchedPassword);
 
+
                 if (hashedPassword.equals(fetchedPassword)) {
 
                     int id = resultSet.getInt(DB_USER_ID);

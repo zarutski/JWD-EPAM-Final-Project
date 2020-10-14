@@ -9,22 +9,16 @@
 <fmt:message key="button.logout_message" var="logout_message"/>
 
 
-<fmt:message key="personal_area.title" var="personal_area_title"/>
-<fmt:message key="personal_area.user_info" var="personal_area_user_info"/>
-<fmt:message key="personal_area.user_data_info" var="personal_area_user_data_info"/>
+<fmt:message key="acc.number" var="card_number"/>
+<fmt:message key="acc.opening_date" var="opening_date"/>
+<fmt:message key="acc.amount" var="acc_amount"/>
+<fmt:message key="acc.state" var="state"/>
+<fmt:message key="acc.open_new" var="open_new"/>
 
-<fmt:message key="personal.phone_number" var="personal_phone_number"/>
-<fmt:message key="personal.passport" var="personal_passport"/>
-<fmt:message key="personal.date_of_birth" var="personal_date_of_birth"/>
-<fmt:message key="personal.address" var="personal_address"/>
-<fmt:message key="personal.post_code" var="personal_post_code"/>
-
-<fmt:message key="personal.load_photo" var="load_photo"/>
 
 <main class="main">
 	<div class="content">
 		<div class="side-panel">
-			
 			<li>
 				<a href="controller?command=go_to_personal_area">${personal_link}</a>
 			</li>
@@ -46,7 +40,6 @@
 					</li>
 				</c:otherwise>
 			</c:choose>
-			
 
 			<div class="logout" >
 				<form action="controller" method="post">
@@ -58,36 +51,30 @@
 		
 		<div class="block">
 			<div class="block-column">
+				
+
+				<c:forEach items="${requestScope.user_accounts}" var="account">
+					<div class="card">
+						<!-- добавить переход на историю операций -->	
+						<b>${card_number}</b><br> 
+						${account.accNumber}<br>
+						<b>${opening_date}</b><br>
+						${account.openingDate}<br>
+						<b>${acc_amount}</b><br>
+						${account.amount/100} ${account.currency}<br>
+						<b>${state}</b><br>
+						${account.state}
+					</div>
+				</c:forEach>
+
 				<li>
-					PHOTO
-				</li>
-				<li>
-					${load_photo}
+					${open_new}
 				</li>
 			</div>
+
 			<div class="block-column">	
 				<li>
-					${personal_area_user_info}	
-					<c:out value="${user_data.surname}" />
-					<c:out value="${user_data.name}" />
-					<c:out value="${user_data.patronymic}" />
-					(<c:out value="${user_data.roleName}" />)
-					
-					<!-- <div class="break"></div> -->
-					<br/><br/>
-					<b>${personal_area_user_data_info}</b>
-					<br/>
-					${personal_phone_number}
-					<c:out value="${user_data.phoneNumber}" /><br/>
-					${personal_passport}
-					<c:out value="${user_data.passportSeries}" />
-					<c:out value="${user_data.passportNumber}" /><br/>
-					${personal_date_of_birth}
-					<c:out value="${user_data.dateOfBirth}" /><br/>
-					${personal_address}
-					<c:out value="${user_data.address}" /><br/>
-					${personal_post_code}
-					<c:out value="${user_data.postCode}" /><br/><br/>
+
 				</li>
 			</div>
 		</div>

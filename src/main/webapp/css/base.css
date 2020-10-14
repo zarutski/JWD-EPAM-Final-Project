@@ -1,0 +1,184 @@
+html{
+	height: 100%;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Anton', sans-serif;
+	color: black;
+	font-size: 16px;
+	background: #F5F5F5;
+	height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	padding: 0;
+	margin: 0;
+}
+
+ul, li {
+	display: block;
+	padding: 5px;
+	margin: 0;
+}
+
+.container {
+	width: 1550px;
+	/*позиционирование по центру*/
+	margin: 0 auto;
+}
+
+.header{
+	background: url('../img/header-bg-blue.png') no-repeat center top / cover;
+}
+
+.footer{
+	background: url('../img/header-bg-blue.png') no-repeat center top / cover;
+	position: absolute;
+  	left: 0;
+  	bottom: 0;
+  	width: 100%;
+}
+
+/*цвет ссылок класса header*/
+header a{
+	color: white; 
+}
+
+footer a{
+	color: white; 
+}
+
+.logo{
+	margin-right: 100px;
+}
+
+/*отображение элементов класса меню в линию*/
+.menu{
+	display: flex;
+}
+
+/*обращение к отдельным элементу меню*/
+.menu li a{
+	text-transform: uppercase;
+	/*убрать подчёркивание*/
+	text-decoration: none;
+	font-size: 14px;
+	/*расстояние между буквами*/
+	letter-spacing: 0.1em;
+}
+
+.menu li{
+	margin-right: 40px;
+}
+
+.tel{
+	font-style: 18px;
+	text-decoration: none;
+	/*элемент класса будет справа*/
+	margin-left: auto;
+	margin-right: 50px;
+	/*расстояние между буквами*/
+	letter-spacing: 0.05em;
+}
+
+.nav{
+	/*строчное отображение для всех детей класса nav*/
+	display: flex;
+	/*выровнять элементы шампуром*/
+	align-items: center;
+	/*отсуп сверху*/
+	/*padding-top: 50px;*/
+	padding: 5px;
+}
+
+.nav p{
+	margin-left: 40px;
+	font-size: 20px;
+	color: white;
+}
+
+.header-title{ 
+	letter-spacing: 0.1em;
+}
+
+#navbar {
+	margin: 0 auto;
+	padding: 5px;
+	display: flex;
+	/*расстояние между буквами*/
+}
+#navbar li a {
+	font-size: 16px;
+	margin-right: 10px;
+	text-decoration: none; 
+}
+
+/* new */
+
+.main{
+	/*-------------------------------------------*/
+}
+.content{
+	width: 1550px;
+	margin: 0 auto;
+	display: flex;
+	/*-------------------------------------------*/
+}
+
+.side-panel{
+	width: 10%;
+	display: block;
+	height: 100%;
+	/*border-right: 1px solid black;*/
+}
+
+.side-panel li{
+	position: relative;
+	margin-top: 10px;
+}
+
+/*обращение к отдельным элементу меню*/
+.side-panel li a{
+	/*text-transform: uppercase;*/
+	/*убрать подчёркивание*/
+	text-decoration: none;
+	font-size: 16px;
+	/*расстояние между буквами*/
+}
+
+.side-panel li a:hover {
+	text-decoration: underline;
+}
+
+.logout{
+	position: relative;
+	margin-top: 100%;
+}
+
+.block{
+	margin-top: 10px;
+	width: 90%;
+	display: flex;
+}
+
+.card{
+	border: 2px solid #000;
+	padding: 10px;
+	margin-bottom: 30px;
+	border-radius: 5px;
+}
+
+
+.block-column {
+	padding: 40px;
+}
+
+
+.break {
+	/*разрыв*/
+	flex-basis: 10%;
+  	height: 0;
+}
+/*body цвет либо для main переписать*/
