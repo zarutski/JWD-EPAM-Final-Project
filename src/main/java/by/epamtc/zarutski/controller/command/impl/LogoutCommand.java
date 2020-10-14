@@ -17,6 +17,8 @@ public class LogoutCommand implements Command {
 	private static final Logger logger = LogManager.getLogger(LogoutCommand.class);
 	
     public static final String MAIN_PAGE = "controller?command=go_to_main_page";
+    
+    private static final String LOG_LOGGED_OUT = "user logged out";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,7 +26,7 @@ public class LogoutCommand implements Command {
 
         if (session != null) {
             session.invalidate();
-            logger.info("user logged out");
+            logger.info(LOG_LOGGED_OUT);
         }
         response.sendRedirect(MAIN_PAGE);
     }

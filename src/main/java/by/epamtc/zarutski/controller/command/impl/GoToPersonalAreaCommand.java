@@ -17,8 +17,12 @@ import by.epamtc.zarutski.service.exception.ServiceException;
 
 public class GoToPersonalAreaCommand implements Command {
 
-    private static final String PARAMETER_USER_DATA = "user_data";
+	private static final String PARAMETER_USER_DATA = "user_data";
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
+    
+    private static final String ATTRIBUTE_ERROR = "error";
+    private static final String ERROR_WRONG_AUTH_DATA = "login or password error";
+    private static final String ERROR_SERVICE = "service error";
 
     private static final String PERSONAL_AREA_PAGE = "/WEB-INF/jsp/personalArea.jsp";
     private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";
@@ -43,7 +47,7 @@ public class GoToPersonalAreaCommand implements Command {
                 userData = service.getUserData(userId, userRoleName);
 
                 if (userData == null) {
-                    request.setAttribute("error", "login or password error");
+                    request.setAttribute(ATTRIBUTE_ERROR, ERROR_WRONG_AUTH_DATA);
                     page = AUTHENTICATION_PAGE;
                 } else {
                     request.setAttribute(PARAMETER_USER_DATA, userData);
@@ -51,12 +55,10 @@ public class GoToPersonalAreaCommand implements Command {
                 }
 
             } catch (ServiceException e) {
-                // TODO --- + нужен лог (т.к. клиенту не нужны ошибки)
-                request.setAttribute("error", "другое сообщение");
+                request.setAttribute(ATTRIBUTE_ERROR, ERROR_SERVICE);
                 page = AUTHENTICATION_PAGE;
             }
         } else {
-            // TODO log
             page = AUTHENTICATION_PAGE;
         }
 

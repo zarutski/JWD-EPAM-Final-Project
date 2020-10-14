@@ -6,8 +6,6 @@ import by.epamtc.zarutski.controller.command.Command;
 import by.epamtc.zarutski.service.AccountService;
 import by.epamtc.zarutski.service.ServiceProvider;
 import by.epamtc.zarutski.service.exception.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,10 +17,13 @@ import java.util.List;
 
 public class GoToAccountsCommand implements Command {
 
-    private static final Logger logger = LogManager.getLogger(GoToAccountsCommand.class);
-
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
     private static final String PARAMETER_USER_ACCOUNTS = "user_accounts";
+    
+    private static final String ATTRIBUTE_ERROR = "error";
+    private static final String ERROR_SERVICE = "service error";
+    private static final String ATTRIBUTE_MESSAGE = "message";  
+    private static final String MESSAGE_NO_ACCOUNTS = "no accounts";
 
     private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
     private static final String ACCOUNTS_PAGE = "/WEB-INF/jsp/accounts.jsp";
@@ -43,16 +44,15 @@ public class GoToAccountsCommand implements Command {
                 usersAccounts = service.getUserAccounts(userId);
 
                 if (usersAccounts == null) {
-                    request.setAttribute("error", "no accounts");
+                    request.setAttribute(ATTRIBUTE_MESSAGE, MESSAGE_NO_ACCOUNTS);
                 } else {
                     request.setAttribute(PARAMETER_USER_ACCOUNTS, usersAccounts);
                 }
 
             } catch (ServiceException e) {
-                request.setAttribute("error", "другое сообщение");
+                request.setAttribute(ATTRIBUTE_ERROR, ERROR_SERVICE);
             }
         } else {
-            // TODO log
             response.sendRedirect(GO_TO_AUTHENTICATION_PAGE);
         }
 
