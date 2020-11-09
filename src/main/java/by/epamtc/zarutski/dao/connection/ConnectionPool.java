@@ -35,7 +35,7 @@ public final class ConnectionPool {
     private static final String LOG_INIT_POOL_ERROR = "Error init connection pool";
     private static final String LOG_POOL_SQL_EXCEPTION = "SQLException in ConnectionPool";
     private static final String LOG_DATABASE_DRIVER_ERROR = "Can't find database driver class";
-    private static final String LOG_CLOSING_CONNECTION_ERROR = "Error closing the connection.";
+    private static final String LOG_CLOSING_QUEUE_ERROR = "Error closing connection queue";
     private static final String LOG_DB_CONNECTING_ERROR = "Error connecting to the data source";
     private static final String LOG_RS_CLOSE_ERROR = "ResultSet isn't closed.";
     private static final String LOG_ST_CLOSE_ERROR = "Statement isn't closed.";
@@ -47,13 +47,14 @@ public final class ConnectionPool {
     private static final ConnectionPool instance = new ConnectionPool();
     private static final int DEFAULT_POOL_SIZE = 5;
 
-    private BlockingQueue<Connection> connectionQueue;
-    private BlockingQueue<Connection> givenAwayConQueue;
+    // available and given away queues
+    private static BlockingQueue<Connection> connectionQueue;
+    private static BlockingQueue<Connection> givenAwayConQueue;
 
-    private String driverName;
-    private String url;
-    private String user;
-    private String password;
+    private final String driverName;
+    private final String url;
+    private final String user;
+    private final String password;
     private int poolSize;
 
     private ConnectionPool() {
@@ -73,19 +74,13 @@ public final class ConnectionPool {
         } catch (ConnectionPoolException e) {
             logger.error(LOG_INIT_POOL_ERROR, e);
         }
-
-    }
-
-    public static ConnectionPool getInstance() {
-        return instance;
     }
 
     public void initPoolData() throws ConnectionPoolException {
         try {
-
             Class.forName(driverName);
-            givenAwayConQueue = new ArrayBlockingQueue<Connection>(poolSize);
-            connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
+            givenAwayConQueue = new ArrayBlockingQueue<>(poolSize);
+            connectionQueue = new ArrayBlockingQueue<>(poolSize);
 
             for (int i = 0; i < poolSize; i++) {
 
@@ -93,12 +88,15 @@ public final class ConnectionPool {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
-
         } catch (SQLException e) {
             throw new ConnectionPoolException(LOG_POOL_SQL_EXCEPTION);
         } catch (ClassNotFoundException e) {
             throw new ConnectionPoolException(LOG_DATABASE_DRIVER_ERROR);
         }
+    }
+
+    public static ConnectionPool getInstance() {
+        return instance;
     }
 
     public void dispose() {
@@ -110,7 +108,7 @@ public final class ConnectionPool {
             closeConnectionsQueue(connectionQueue);
             closeConnectionsQueue(givenAwayConQueue);
         } catch (SQLException e) {
-            logger.error(LOG_CLOSING_CONNECTION_ERROR, e);
+            logger.error(LOG_CLOSING_QUEUE_ERROR, e);
         }
     }
 
@@ -166,6 +164,15 @@ public final class ConnectionPool {
         }
     }
 
+    public void closeConnection(Connection con) throws ConnectionPoolException {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            logger.error(LOG_CONN_CLOSE_ERROR);
+            throw new ConnectionPoolException(e);
+        }
+    }
+
     private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
         Connection connection;
         while ((connection = queue.poll()) != null) {
@@ -173,6 +180,15 @@ public final class ConnectionPool {
                 connection.commit();
             }
             ((PooledConnection) connection).reallyClose();
+        }
+    }
+
+    public void closeStatement(Statement st) throws ConnectionPoolException {
+        try {
+            st.close();
+        } catch (SQLException e) {
+            logger.error(LOG_ST_CLOSE_ERROR);
+            throw new ConnectionPoolException(e);
         }
     }
 
@@ -210,10 +226,14 @@ public final class ConnectionPool {
         }
     }
 
+    // decorates standard jdbc Connection class, changing default behavior for close() method
+    // for removing and offering connections using queues
     private class PooledConnection implements Connection {
+
         private static final String ALLOCATING_CONN_ERROR = "Error allocating connection in the pool";
         private static final String DELETING_CONN_ERROR = "Error deleting connection from the given away connections pool";
         private static final String CLOSING_CLOSED_MESSAGE = "Attempting to close closed";
+
         private Connection connection;
 
         public PooledConnection(Connection c) throws SQLException {
@@ -520,5 +540,4 @@ public final class ConnectionPool {
         }
 
     }
-
 }

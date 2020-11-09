@@ -1,16 +1,16 @@
 package by.epamtc.zarutski.dao;
 
-import by.epamtc.zarutski.dao.impl.SQLAccountDAOImpl;
-import by.epamtc.zarutski.dao.impl.SQLCardDAOImpl;
-import by.epamtc.zarutski.dao.impl.SQLUserDAOImpl;
+import by.epamtc.zarutski.dao.impl.UserDAOImpl;
+import by.epamtc.zarutski.dao.impl.FacilityDAOImpl;
+import by.epamtc.zarutski.dao.impl.FacilityActionDAOImpl;
 
 public class DAOProvider {
 
     private static final DAOProvider instance = new DAOProvider();
 
-    private final UserDAO userDAO = new SQLUserDAOImpl();
-    private final CardDAO cardDAO = new SQLCardDAOImpl();
-    private final AccountDAO accountDAO = new SQLAccountDAOImpl();
+    private final UserDAO userDAO = new UserDAOImpl();
+    private final FacilityDAO facilityDAO = new FacilityDAOImpl();
+    private final FacilityActionDAO facilityActionDAO = new FacilityActionDAOImpl();
 
     private DAOProvider() {
     }
@@ -19,12 +19,12 @@ public class DAOProvider {
         return userDAO;
     }
 
-    public CardDAO getCardDAO() {
-        return cardDAO;
+    public FacilityDAO getFacilityDAO() {
+        return facilityDAO;
     }
 
-    public AccountDAO getAccountDAO() {
-        return accountDAO;
+    public FacilityActionDAO getFacilityActionDAO() {
+        return facilityActionDAO;
     }
 
     public static DAOProvider getInstance() {

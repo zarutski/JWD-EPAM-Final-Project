@@ -32,60 +32,66 @@
 <fmt:message key="registration_error.13" var="registration_data_format_error"/>
 <fmt:message key="registration_error.14" var="user_exists_error"/>
 
-
-	<nav>
-		<ul id="navbar">
-			<li><a href="controller?command=go_to_main_page">${main_link}</a></li>
-			<li><a href="controller?command=go_to_authentication_page">${sign_in}</a></li>
-		</ul>
-	</nav>
-
-		<form action="controller" method="post" accept-charset="utf-8">
-			<input type="hidden" name="command" value="registration" />
-			${name_message}<br/>
-			<input type="text" name="name" value="" required/><br/>
-			${surname_message}<br/>
-			<input type="text" name="surname" value="" required/><br/>
-			${patronymic_message}<br/>
-			<input type="text" name="patronymic" value="" required/><br/>
-			${phone_number_message}<br/>
-			<input type="text" pattern="^\\+375([0-9]){7,9}$" title="${phone_pattern}" name="phone_number" value="" placeholder="+375xxxxxxxx" required/><br/>
-			${passport_serial_message}<br/>
-			<input type="text" pattern="^[a-zA-Z]{2}$" title="${passport_series_pattern}" name="passport_series" value="" required/><br/>
-			${passport_number_message}<br/>
-			<input type="text" pattern="^\\d{7}$" title="${passport_number_pattern}" name="passport_number" value="" required/><br/>
-			${date_of_birth_message}<br/>
-			<input type="text" pattern="^\\d{4}-\\d{2}-\\d{2}$" title="${date_pattern}" name="date_of_birth" value="" placeholder="1999-12-31" required/><br/>
-			${address_message}<br/>
-			<input type="text" name="address" value="" required/><br/>
-			${post_code_message}<br/>
-			<input type="text" name="post_code" value="" required/><br/>
-			${email_message}<br/>
-			<input type="text" pattern="^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$" title="${email_pattern}" name="email" value="" required/><br/>
-			${login_message}<br/>
-			<input type="text" pattern="^[a-z0-9_-]{4,16}$" title="${login_pattern}" name="login" value="" required/><br/>
-			${password_message}<br/> 
-			<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$" title="${password_pattern}" name="password" value="" required/><br />
-			${confirm_password_message}<br/> 
-			<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$" title="${password_pattern}" name="confirm_password" value="" required/><br /><br />
-
+<main class="main">
+	<div class="content">
+		<div class="block">
+			<nav>
+				<ul id="navbar">
+					<li><a href="controller?command=go_to_main_page">${main_link}</a></li>
+					<li><a href="controller?command=go_to_authentication_page">${sign_in}</a></li>
+				</ul>
+			</nav>
+			<div class="block-column">
+				<form action="controller" method="post" accept-charset="utf-8">
+					<input type="hidden" name="command" value="registration" />
+					${name_message}<br/>
+					<input type="text" name="name" value="" required/><br/>
+					${surname_message}<br/>
+					<input type="text" name="surname" value="" required/><br/>
+					${patronymic_message}<br/>
+					<input type="text" name="patronymic" value="" required/><br/>
+					${phone_number_message}<br/>
+					<input type="text" pattern="^\+375([0-9]){7,9}$" title="${phone_pattern}" name="phone_number" value="" placeholder="+375xxxxxxxx" required/><br/>
+					${passport_serial_message}<br/>
+					<input type="text" pattern="^[a-zA-Z]{2}$" title="${passport_series_pattern}" name="passport_series" value="" required/><br/>
+					${passport_number_message}<br/>
+					<input type="text" pattern="^\d{7}$" title="${passport_number_pattern}" name="passport_number" value="" required/><br/>
+					${date_of_birth_message}<br/>
+					<input type="text" pattern="^\d{4}-\d{2}-\d{2}$" title="${date_pattern}" name="date_of_birth" value="" placeholder="1999-12-31" required/><br/>
+					${address_message}<br/>
+					<input type="text" name="address" value="" required/><br/>
+					${post_code_message}<br/>
+					<input type="text" name="post_code" value="" required/><br/>
+					${email_message}<br/>
+					<input type="text" pattern="^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$" title="${email_pattern}" name="email" value="" required/><br/>
+					${login_message}<br/>
+					<input type="text" pattern="^[a-z0-9_-]{4,16}$" title="${login_pattern}" name="login" value="" required/><br/>
+					${password_message}<br/> 
+					<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,16}$" title="${password_pattern}" name="password" value="" required/><br />
+					${confirm_password_message}<br/> 
+					<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$" title="${password_pattern}" name="confirm_password" value="" required/><br /><br />
 		
-			<c:choose>
-				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_11'}">
-					<p>${registration_data_exists_error}</p>
-				</c:when>
-				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_12'}">
-					<p>${registration_service_error}</p>
-				</c:when>
-				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_13'}">
-					<p>${registration_data_format_error}</p>
-				</c:when>
-				<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_14'}">
-					<p>${user_exists_error}</p>
-				</c:when>
-			</c:choose>
-			 
-			<input type="submit" value="${sign_up}"/><br /> 
-		</form>
+				
+					<c:choose>
+						<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_11'}">
+							<p>${registration_data_exists_error}</p>
+						</c:when>
+						<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_12'}">
+							<p>${registration_service_error}</p>
+						</c:when>
+						<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_13'}">
+							<p>${registration_data_format_error}</p>
+						</c:when>
+						<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_14'}">
+							<p>${user_exists_error}</p>
+						</c:when>
+					</c:choose>
+					 
+					<input type="submit" value="${sign_up}"/><br /> 
+				</form>
+			</div>
+		</div>
+	</div>
+</main>
 
 <%@ include file="footer.jsp" %>

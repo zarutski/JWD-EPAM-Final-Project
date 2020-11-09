@@ -14,10 +14,11 @@ import java.io.IOException;
 
 public class LogoutCommand implements Command {
 
-	private static final Logger logger = LogManager.getLogger(LogoutCommand.class);
-	
-    public static final String MAIN_PAGE = "controller?command=go_to_main_page";
-    
+    private static final Logger logger = LogManager.getLogger(LogoutCommand.class);
+
+    private static final String GO_TO_MAIN_PAGE = "controller?command=go_to_main_page";
+    private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
+
     private static final String LOG_LOGGED_OUT = "user logged out";
 
     @Override
@@ -25,9 +26,9 @@ public class LogoutCommand implements Command {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            session.invalidate();
+            session.removeAttribute(PARAMETER_AUTHENTICATION_DATA);
             logger.info(LOG_LOGGED_OUT);
         }
-        response.sendRedirect(MAIN_PAGE);
+        response.sendRedirect(GO_TO_MAIN_PAGE);
     }
 }

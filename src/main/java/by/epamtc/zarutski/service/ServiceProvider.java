@@ -1,7 +1,7 @@
 package by.epamtc.zarutski.service;
 
-import by.epamtc.zarutski.service.impl.AccountServiceImpl;
-import by.epamtc.zarutski.service.impl.CardServiceImpl;
+import by.epamtc.zarutski.service.impl.FacilityActionServiceImpl;
+import by.epamtc.zarutski.service.impl.FacilityServiceImpl;
 import by.epamtc.zarutski.service.impl.UserServiceImpl;
 
 public class ServiceProvider {
@@ -9,8 +9,8 @@ public class ServiceProvider {
     private static final ServiceProvider instance = new ServiceProvider();
 
     private final UserService userService = new UserServiceImpl();
-    private final CardService cardService = new CardServiceImpl();
-    private final AccountService accountService = new AccountServiceImpl();
+    private final FacilityService facilityService = new FacilityServiceImpl();
+    private final FacilityActionService facilityActionService = new FacilityActionServiceImpl();
 
     public static ServiceProvider getInstance() {
         return instance;
@@ -20,11 +20,12 @@ public class ServiceProvider {
         return userService;
     }
 
-    public CardService getCardService() {
-        return cardService;
+    public FacilityActionService getFacilityActionService() {
+        return facilityActionService;
     }
 
-    public AccountService getAccountService() {
-        return accountService;
+    public FacilityService getFacilityService() {
+        return facilityService;
     }
+
 }

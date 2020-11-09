@@ -22,7 +22,7 @@ import by.epamtc.zarutski.service.exception.UserExistsServiceException;
 import by.epamtc.zarutski.service.exception.WrongDataServiceException;
 
 public class RegistrationCommand implements Command {
-	
+
     private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
 
     private static final String PARAMETER_LOGIN = "login";
@@ -43,20 +43,23 @@ public class RegistrationCommand implements Command {
     private static final String DATE_FORMATTER_PATTERN = "yyyy-MM-d";
     private static final String DATE_OF_BIRTH_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$";
 
-    private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
-    private static final String GO_TO_REGISTRATION_PAGE = "controller?command=go_to_registration_page";
-
     private static final String AMPERSAND = "&";
     private static final String PARAMETER_REGISTRATION_ERROR = "error=error_11";
     private static final String PARAMETER_SERVICE_ERROR = "error=error_12";
     private static final String PARAMETER_REGISTRATION_DATA_ERROR = "error=error_13";
     private static final String PARAMETER_USER_EXISTS_ERROR = "error=error_14";
+    private static final String MESSAGE_REG_SUCCESS = "message=reg_success";
 
+    private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
+    private static final String GO_TO_REGISTRATION_PAGE = "controller?command=go_to_registration_page";
+
+    private static final String LOG_REGISTRATION_SUCCESSFUL = "User registration successful";
+    private static final String LOG_WRONG_REGISTRATION_DATA = "Registration data format isn't correct";
+    private static final String LOG_EMPTY_FIELDS = "Empty fields in registration form";
+    private static final String LOG_ERROR_PARSING_DATE = "Error while parsing date field";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String page;
 
         String login = request.getParameter(PARAMETER_LOGIN);
         String password = request.getParameter(PARAMETER_PASSWORD);
@@ -74,7 +77,7 @@ public class RegistrationCommand implements Command {
         String date = request.getParameter(PARAMETER_DATE_OF_BIRTH);
         LocalDate dateOfBirth = null;
 
-        if (isValidDateOfBirthData(date)) {
+        if (isValidDateFormat(date)) {
             dateOfBirth = parseDate(date);
         }
 
@@ -88,12 +91,13 @@ public class RegistrationCommand implements Command {
         registrationData.setSurname(surname);
         registrationData.setPatronymic(patronymic);
         registrationData.setPhoneNumber(phoneNumber);
-
         registrationData.setPassportSeries(passportSeries.toUpperCase());
         registrationData.setPassportNumber(passportNumber);
         registrationData.setDateOfBirth(dateOfBirth);
         registrationData.setAddress(address);
         registrationData.setPostCode(postCode);
+
+        String page = GO_TO_REGISTRATION_PAGE;
 
         if (UserValidation.isRegistrationDataExists(registrationData)) {
 
@@ -102,33 +106,28 @@ public class RegistrationCommand implements Command {
 
             try {
                 if (service.registration(registrationData)) {
-                    logger.info("User registration successfull");
-                    page = GO_TO_AUTHENTICATION_PAGE;
-                    // добавить сообщение - сейчас вы можете зарегестрироваться используя свой логин и пароль
+                    logger.info(LOG_REGISTRATION_SUCCESSFUL);
+                    page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + MESSAGE_REG_SUCCESS;
                 } else {
-                    page = GO_TO_REGISTRATION_PAGE + AMPERSAND + PARAMETER_SERVICE_ERROR;
+                    page += AMPERSAND + PARAMETER_SERVICE_ERROR;
                 }
             } catch (WrongDataServiceException e) {
-                logger.info("Registration data format isn't correct", e);
-                page = GO_TO_REGISTRATION_PAGE + AMPERSAND + PARAMETER_REGISTRATION_DATA_ERROR;
+                logger.info(LOG_WRONG_REGISTRATION_DATA, e);
+                page = AMPERSAND + PARAMETER_REGISTRATION_DATA_ERROR;
             } catch (UserExistsServiceException e) {
-                page = GO_TO_REGISTRATION_PAGE + AMPERSAND + PARAMETER_USER_EXISTS_ERROR;
+                page = AMPERSAND + PARAMETER_USER_EXISTS_ERROR;
             } catch (ServiceException e) {
-                page = GO_TO_REGISTRATION_PAGE + AMPERSAND + PARAMETER_SERVICE_ERROR;
+                page = AMPERSAND + PARAMETER_SERVICE_ERROR;
             }
         } else {
-            logger.info("Empty fields in registration form");
-            page = GO_TO_REGISTRATION_PAGE + AMPERSAND + PARAMETER_REGISTRATION_ERROR;
-
+            logger.info(LOG_EMPTY_FIELDS);
+            page = AMPERSAND + PARAMETER_REGISTRATION_ERROR;
         }
 
         response.sendRedirect(page);
     }
 
-
-    // TODO - refactor
-    private static boolean isValidDateOfBirthData(String date) {
-        // переделать
+    private static boolean isValidDateFormat(String date) {
         return (date != null) && date.matches(DATE_OF_BIRTH_PATTERN);
     }
 
@@ -139,7 +138,7 @@ public class RegistrationCommand implements Command {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMATTER_PATTERN);
             dateOfBirth = LocalDate.parse(date, formatter);
         } catch (DateTimeParseException e) {
-            logger.warn("Error while parsing date field");
+            logger.warn(LOG_ERROR_PARSING_DATE);
         }
         return dateOfBirth;
     }

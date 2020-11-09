@@ -28,8 +28,11 @@ public class AuthenticationCommand implements Command {
     private static final String PARAMETER_AUTHENTICATION_ERROR = "error=error_01";
     private static final String PARAMETER_SERVICE_ERROR = "error=error_02";
 
-    private static final String GO_TO_PESONAL_AREA = "controller?command=go_to_personal_area";
+    private static final String GO_TO_PERSONAL_AREA = "controller?command=go_to_personal_area";
     private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
+
+    private static final String LOG_AUTHENTICATION_SUCCESSFUL = "User authenticated successfully";
+    private static final String LOG_WRONG_DATA_FORMAT = "Authentication data format isn't correct";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,7 +44,6 @@ public class AuthenticationCommand implements Command {
         String password = request.getParameter(PARAMETER_PASSWORD);
 
         AuthenticationData authenticationData = null;
-        HttpSession session;
         String page;
 
         try {
@@ -50,14 +52,14 @@ public class AuthenticationCommand implements Command {
             if (authenticationData == null) {
                 page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
             } else {
-                session = request.getSession();
+                HttpSession session = request.getSession();
                 session.setAttribute(PARAMETER_AUTHENTICATION_DATA, authenticationData);
-                logger.info("User authenticated successfully");
-                page = GO_TO_PESONAL_AREA; 
+                logger.info(authenticationData.getUserId() + LOG_AUTHENTICATION_SUCCESSFUL);
+                page = GO_TO_PERSONAL_AREA;
             }
 
         } catch (WrongDataServiceException e) {
-            logger.info("Authentication data format isn't correct", e);
+            logger.info(LOG_WRONG_DATA_FORMAT, e);
             page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_AUTHENTICATION_ERROR;
         } catch (ServiceException e) {
             page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + PARAMETER_SERVICE_ERROR;

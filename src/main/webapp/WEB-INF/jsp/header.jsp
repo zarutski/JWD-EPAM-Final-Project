@@ -6,6 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	
 	<title>E-payments</title>
 	<link rel="stylesheet" media="all" type="text/css" href="${pageContext.request.contextPath}/css/base.css">
 	<link href="${pageContext.request.contextPath}/img/testicon.png" rel="icon">
@@ -14,10 +15,10 @@
 	<c:if test="${not empty sessionScope.local}">
         <fmt:setLocale value="${sessionScope.local}"/>
     </c:if>
-    
-     <fmt:setBundle basename="localization.payment_app"/>
 
+     <fmt:setBundle basename="localization.payment_app"/>
      <fmt:message key="app_title_name" var="app_title"/>
+
 </head>
 
 <body>
@@ -25,20 +26,18 @@
 		<div class="header">
 			<div class="container">
 				<div class="nav">
-					<img src="img/logo-50.png" alt="Bank logo"/>
+					<img src="img/header-logo-50.png" alt="Bank logo"/>
 					<p align="center">${app_title}</p>
 					<a href="tel:+375001234567" class="tel">+375 00 123-45-67</a>
 					
+					<form action="controller?command=localization" method="post">
+					                       <input type="hidden" name="local" value="ru"/>
+					                       <input type="submit" value="RU"/>
+						</form>
 						<form action="controller?command=localization" method="post">
-					                        <input type="hidden" name="local" value="ru"/>
-					                        <input type="hidden" name="previous_command" value="${pageContext.request.getParameter("command")}">
-					                        <input type="submit" value="ru"/>
-							</form>
-							<form action="controller?command=localization" method="post">
-						                        <input type="hidden" name="local" value="en"/>
-						                        <input type="hidden" name="previous_command" value="${pageContext.request.getParameter("command")}">
-						                        <input type="submit" value="en"/>
-						</form>	
+					                        <input type="hidden" name="local" value="en"/>
+					                        <input type="submit" value="EN"/>
+					</form>	
 				</div>
 			</div>
 		</div>
