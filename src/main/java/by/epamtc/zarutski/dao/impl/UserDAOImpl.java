@@ -213,11 +213,9 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException(e);
         } finally {
             try {
-                if (connectionPool != null) {
-                    rollbackIfFailed(connectionPool, con, registrationSuccessful);
-                    connectionPool.finishTransaction(con);
-                    connectionPool.closeConnection(con, insertUsersStatement);
-                }
+                rollbackIfFailed(connectionPool, con, registrationSuccessful);
+                connectionPool.finishTransaction(con);
+                connectionPool.closeConnection(con, insertUsersStatement);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                 throw new DAOException(e);
@@ -414,9 +412,7 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException(KEY_ERROR_MESSAGE);
         } finally {
             try {
-                if (connectionPool != null) {
-                    connectionPool.closeStatement(ps, generatedKeys);
-                }
+                connectionPool.closeStatement(ps, generatedKeys);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                 throw new DAOException(e);
@@ -467,9 +463,7 @@ public class UserDAOImpl implements UserDAO {
 
     private void closeResources(Connection con, PreparedStatement ps) throws DAOException {
         try {
-            if (connectionPool != null) {
-                connectionPool.closeConnection(con, ps);
-            }
+            connectionPool.closeConnection(con, ps);
         } catch (ConnectionPoolException e) {
             logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
             throw new DAOException(e);
@@ -478,9 +472,7 @@ public class UserDAOImpl implements UserDAO {
 
     private void closeResources(Connection con, PreparedStatement ps, ResultSet resultSet) throws DAOException {
         try {
-            if (connectionPool != null) {
-                connectionPool.closeConnection(con, ps, resultSet);
-            }
+            connectionPool.closeConnection(con, ps, resultSet);
         } catch (ConnectionPoolException e) {
             logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
             throw new DAOException(e);

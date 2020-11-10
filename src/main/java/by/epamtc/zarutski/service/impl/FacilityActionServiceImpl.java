@@ -63,6 +63,8 @@ public class FacilityActionServiceImpl implements FacilityActionService {
 
         try {
             return dao.orderNewCard(cardOrderData, accOrderData);
+        } catch (WrongDataDAOException e) {
+            throw new WrongDataServiceException(e);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

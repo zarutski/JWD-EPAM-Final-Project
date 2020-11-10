@@ -125,51 +125,39 @@ public final class ConnectionPool {
     }
 
     public void closeConnection(Connection con, Statement st, ResultSet rs) throws ConnectionPoolException {
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(LOG_RS_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                logger.error(LOG_RS_CLOSE_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
 
-        try {
-            st.close();
-        } catch (SQLException e) {
-            logger.error(LOG_ST_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
-        }
-
-        try {
-            con.close();
-        } catch (SQLException e) {
-            logger.error(LOG_CONN_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
-        }
-
+        closeConnection(con, st);
     }
 
     public void closeConnection(Connection con, Statement st) throws ConnectionPoolException {
-        try {
-            st.close();
-        } catch (SQLException e) {
-            logger.error(LOG_ST_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                logger.error(LOG_ST_CLOSE_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
 
-        try {
-            con.close();
-        } catch (SQLException e) {
-            logger.error(LOG_CONN_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
-        }
+        closeConnection(con);
     }
 
     public void closeConnection(Connection con) throws ConnectionPoolException {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            logger.error(LOG_CONN_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                logger.error(LOG_CONN_CLOSE_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
     }
 
@@ -183,46 +171,50 @@ public final class ConnectionPool {
         }
     }
 
-    public void closeStatement(Statement st) throws ConnectionPoolException {
-        try {
-            st.close();
-        } catch (SQLException e) {
-            logger.error(LOG_ST_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
-        }
-    }
 
     public void closeStatement(Statement st, ResultSet rs) throws ConnectionPoolException {
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(LOG_RS_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                logger.error(LOG_RS_CLOSE_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
 
-        try {
-            st.close();
-        } catch (SQLException e) {
-            logger.error(LOG_ST_CLOSE_ERROR);
-            throw new ConnectionPoolException(e);
+        closeStatement(st);
+    }
+
+    public void closeStatement(Statement st) throws ConnectionPoolException {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                logger.error(LOG_ST_CLOSE_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
     }
 
     public void rollback(Connection connection) throws ConnectionPoolException {
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            logger.error(LOG_ROLLBACK_ERROR);
-            throw new ConnectionPoolException(e);
+        if (connection != null) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                logger.error(LOG_ROLLBACK_ERROR);
+                throw new ConnectionPoolException(e);
+            }
         }
     }
 
     public void finishTransaction(Connection connection) throws ConnectionPoolException {
-        try {
-            connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            logger.error(LOG_AUTO_COMMIT);
-            throw new ConnectionPoolException(e);
+        if (connection != null) {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                logger.error(LOG_AUTO_COMMIT);
+                throw new ConnectionPoolException(e);
+            }
         }
     }
 

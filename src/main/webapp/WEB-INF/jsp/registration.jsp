@@ -31,6 +31,7 @@
 <fmt:message key="registration_error.12" var="registration_service_error"/>
 <fmt:message key="registration_error.13" var="registration_data_format_error"/>
 <fmt:message key="registration_error.14" var="user_exists_error"/>
+<fmt:message key="registration_message.passwords_no_match" var="passwords_no_match"/>
 
 <main class="main">
 	<div class="content">
@@ -69,7 +70,7 @@
 					${password_message}<br/> 
 					<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,16}$" title="${password_pattern}" name="password" value="" required/><br />
 					${confirm_password_message}<br/> 
-					<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$" title="${password_pattern}" name="confirm_password" value="" required/><br /><br />
+					<input type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,16}$" title="${password_pattern}" name="confirm_password" value="" required/><br /><br />
 		
 				
 					<c:choose>
@@ -84,6 +85,9 @@
 						</c:when>
 						<c:when test="${pageContext.request.getParameter(\"error\") eq 'error_14'}">
 							<p>${user_exists_error}</p>
+						</c:when>
+						<c:when test="${pageContext.request.getParameter(\"message\") eq 'no_match'}">
+							<p>${passwords_no_match}</p>
 						</c:when>
 					</c:choose>
 					 

@@ -27,6 +27,7 @@ public class RegistrationCommand implements Command {
 
     private static final String PARAMETER_LOGIN = "login";
     private static final String PARAMETER_PASSWORD = "password";
+    private static final String PARAMETER_CONFIRM_PASSWORD = "confirm_password";
     private static final String PARAMETER_EMAIL = "email";
 
     private static final String PARAMETER_NAME = "name";
@@ -49,6 +50,7 @@ public class RegistrationCommand implements Command {
     private static final String PARAMETER_REGISTRATION_DATA_ERROR = "error=error_13";
     private static final String PARAMETER_USER_EXISTS_ERROR = "error=error_14";
     private static final String MESSAGE_REG_SUCCESS = "message=reg_success";
+    private static final String MESSAGE_NO_MATCH = "message=no_match";
 
     private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
     private static final String GO_TO_REGISTRATION_PAGE = "controller?command=go_to_registration_page";
@@ -61,67 +63,73 @@ public class RegistrationCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String login = request.getParameter(PARAMETER_LOGIN);
         String password = request.getParameter(PARAMETER_PASSWORD);
-        String email = request.getParameter(PARAMETER_EMAIL);
-
-        String name = request.getParameter(PARAMETER_NAME);
-        String surname = request.getParameter(PARAMETER_SURNAME);
-        String patronymic = request.getParameter(PARAMETER_PATRONYMIC);
-        String phoneNumber = request.getParameter(PARAMETER_PHONE_NUMBER);
-        String passportSeries = request.getParameter(PARAMETER_PASSPORT_SERIES);
-        String passportNumber = request.getParameter(PARAMETER_PASSPORT_NUMBER);
-        String address = request.getParameter(PARAMETER_ADDRESS);
-        String postCode = request.getParameter(PARAMETER_POST_CODE);
-
-        String date = request.getParameter(PARAMETER_DATE_OF_BIRTH);
-        LocalDate dateOfBirth = null;
-
-        if (isValidDateFormat(date)) {
-            dateOfBirth = parseDate(date);
-        }
-
-        RegistrationData registrationData = new RegistrationData();
-
-        registrationData.setEmail(email);
-        registrationData.setLogin(login);
-        registrationData.setPassword(password);
-
-        registrationData.setName(name);
-        registrationData.setSurname(surname);
-        registrationData.setPatronymic(patronymic);
-        registrationData.setPhoneNumber(phoneNumber);
-        registrationData.setPassportSeries(passportSeries.toUpperCase());
-        registrationData.setPassportNumber(passportNumber);
-        registrationData.setDateOfBirth(dateOfBirth);
-        registrationData.setAddress(address);
-        registrationData.setPostCode(postCode);
-
+        String confirmPassword = request.getParameter(PARAMETER_CONFIRM_PASSWORD);
         String page = GO_TO_REGISTRATION_PAGE;
 
-        if (UserValidation.isRegistrationDataExists(registrationData)) {
+        if (password.equals(confirmPassword)) {
+            String login = request.getParameter(PARAMETER_LOGIN);
+            String email = request.getParameter(PARAMETER_EMAIL);
 
-            ServiceProvider provider = ServiceProvider.getInstance();
-            UserService service = provider.getUserService();
+            String name = request.getParameter(PARAMETER_NAME);
+            String surname = request.getParameter(PARAMETER_SURNAME);
+            String patronymic = request.getParameter(PARAMETER_PATRONYMIC);
+            String phoneNumber = request.getParameter(PARAMETER_PHONE_NUMBER);
+            String passportSeries = request.getParameter(PARAMETER_PASSPORT_SERIES);
+            String passportNumber = request.getParameter(PARAMETER_PASSPORT_NUMBER);
+            String address = request.getParameter(PARAMETER_ADDRESS);
+            String postCode = request.getParameter(PARAMETER_POST_CODE);
 
-            try {
-                if (service.registration(registrationData)) {
-                    logger.info(LOG_REGISTRATION_SUCCESSFUL);
-                    page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + MESSAGE_REG_SUCCESS;
-                } else {
+            String date = request.getParameter(PARAMETER_DATE_OF_BIRTH);
+            LocalDate dateOfBirth = null;
+
+            if (isValidDateFormat(date)) {
+                dateOfBirth = parseDate(date);
+            }
+
+            RegistrationData registrationData = new RegistrationData();
+
+            registrationData.setEmail(email);
+            registrationData.setLogin(login);
+            registrationData.setPassword(password);
+
+            registrationData.setName(name);
+            registrationData.setSurname(surname);
+            registrationData.setPatronymic(patronymic);
+            registrationData.setPhoneNumber(phoneNumber);
+            registrationData.setPassportSeries(passportSeries.toUpperCase());
+            registrationData.setPassportNumber(passportNumber);
+            registrationData.setDateOfBirth(dateOfBirth);
+            registrationData.setAddress(address);
+            registrationData.setPostCode(postCode);
+
+
+            if (UserValidation.isRegistrationDataExists(registrationData)) {
+
+                ServiceProvider provider = ServiceProvider.getInstance();
+                UserService service = provider.getUserService();
+
+                try {
+                    if (service.registration(registrationData)) {
+                        logger.info(LOG_REGISTRATION_SUCCESSFUL);
+                        page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + MESSAGE_REG_SUCCESS;
+                    } else {
+                        page += AMPERSAND + PARAMETER_SERVICE_ERROR;
+                    }
+                } catch (WrongDataServiceException e) {
+                    logger.info(LOG_WRONG_REGISTRATION_DATA, e);
+                    page += AMPERSAND + PARAMETER_REGISTRATION_DATA_ERROR;
+                } catch (UserExistsServiceException e) {
+                    page += AMPERSAND + PARAMETER_USER_EXISTS_ERROR;
+                } catch (ServiceException e) {
                     page += AMPERSAND + PARAMETER_SERVICE_ERROR;
                 }
-            } catch (WrongDataServiceException e) {
-                logger.info(LOG_WRONG_REGISTRATION_DATA, e);
-                page = AMPERSAND + PARAMETER_REGISTRATION_DATA_ERROR;
-            } catch (UserExistsServiceException e) {
-                page = AMPERSAND + PARAMETER_USER_EXISTS_ERROR;
-            } catch (ServiceException e) {
-                page = AMPERSAND + PARAMETER_SERVICE_ERROR;
+            } else {
+                logger.info(LOG_EMPTY_FIELDS);
+                page += AMPERSAND + PARAMETER_REGISTRATION_ERROR;
             }
         } else {
-            logger.info(LOG_EMPTY_FIELDS);
-            page = AMPERSAND + PARAMETER_REGISTRATION_ERROR;
+            page += AMPERSAND + MESSAGE_NO_MATCH;
         }
 
         response.sendRedirect(page);

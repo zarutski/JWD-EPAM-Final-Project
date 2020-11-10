@@ -309,9 +309,7 @@ public class FacilityDAOImpl implements FacilityDAO {
 
     private void closeResources(Connection con, PreparedStatement ps, ResultSet resultSet) throws DAOException {
         try {
-            if (connectionPool != null) {
-                connectionPool.closeConnection(con, ps, resultSet);
-            }
+            connectionPool.closeConnection(con, ps, resultSet);
         } catch (ConnectionPoolException e) {
             logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
             throw new DAOException(e);

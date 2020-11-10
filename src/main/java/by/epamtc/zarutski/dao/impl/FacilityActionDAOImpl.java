@@ -103,6 +103,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
     private static final String LOG_ERROR_CLOSING_RESOURCES = "Error closing resources";
     private static final String LOG_ERROR_FETCHING_DATA = "DB error during fetching user data";
     private static final String LOG_DB_TRANSFER_ERROR = "DB error during transfer";
+    private static final String LOG_WRONG_ORDER_DATA = "wrong card order data";
 
     @Override
     public boolean transfer(TransferData transferData) throws DAOException {
@@ -237,11 +238,9 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
                 throw new DAOException(e);
             } finally {
                 try {
-                    if (connectionPool != null) {
-                        rollbackIfFailed(connectionPool, con, transferSuccessful);
-                        connectionPool.finishTransaction(con);
-                        connectionPool.closeConnection(con);
-                    }
+                    rollbackIfFailed(connectionPool, con, transferSuccessful);
+                    connectionPool.finishTransaction(con);
+                    connectionPool.closeConnection(con);
                 } catch (ConnectionPoolException e) {
                     logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                     throw new DAOException(e);
@@ -317,6 +316,9 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
                 successful = true;
             }
 
+        } catch (SQLIntegrityConstraintViolationException e) {
+            logger.error(LOG_WRONG_ORDER_DATA, e);
+            throw new WrongDataDAOException(e);
         } catch (ConnectionPoolException e) {
             logger.error(LOG_CONNECTION_POOL_ERROR, e);
             throw new DAOException(e);
@@ -325,11 +327,9 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
             throw new DAOException(e);
         } finally {
             try {
-                if (connectionPool != null) {
-                    rollbackIfFailed(connectionPool, con, successful);
-                    connectionPool.finishTransaction(con);
-                    connectionPool.closeConnection(con, insertAccHasCardStatement);
-                }
+                rollbackIfFailed(connectionPool, con, successful);
+                connectionPool.finishTransaction(con);
+                connectionPool.closeConnection(con, insertAccHasCardStatement);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                 throw new DAOException(e);
@@ -364,9 +364,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
             throw new DAOException(e);
         } finally {
             try {
-                if (connectionPool != null) {
-                    connectionPool.closeConnection(con, ps);
-                }
+                connectionPool.closeConnection(con, ps);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                 throw new DAOException(e);
@@ -562,9 +560,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
             throw new DAOException(KEY_ERROR_MESSAGE);
         } finally {
             try {
-                if (connectionPool != null) {
-                    connectionPool.closeStatement(ps, generatedKeys);
-                }
+                connectionPool.closeStatement(ps, generatedKeys);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
                 throw new DAOException(e);
@@ -625,9 +621,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
 
     private void closeResources(Connection con, PreparedStatement ps, ResultSet resultSet) throws DAOException {
         try {
-            if (connectionPool != null) {
-                connectionPool.closeConnection(con, ps, resultSet);
-            }
+            connectionPool.closeConnection(con, ps, resultSet);
         } catch (ConnectionPoolException e) {
             logger.error(LOG_ERROR_CLOSING_RESOURCES, e);
             throw new DAOException(e);

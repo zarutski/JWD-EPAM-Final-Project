@@ -31,7 +31,7 @@ public class AuthenticationCommand implements Command {
     private static final String GO_TO_PERSONAL_AREA = "controller?command=go_to_personal_area";
     private static final String GO_TO_AUTHENTICATION_PAGE = "controller?command=go_to_authentication_page";
 
-    private static final String LOG_AUTHENTICATION_SUCCESSFUL = "User authenticated successfully";
+    private static final String LOG_AUTHENTICATION_SUCCESSFUL = "(id) user authenticated successfully";
     private static final String LOG_WRONG_DATA_FORMAT = "Authentication data format isn't correct";
 
     @Override
