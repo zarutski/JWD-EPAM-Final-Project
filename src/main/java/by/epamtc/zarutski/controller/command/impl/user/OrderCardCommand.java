@@ -17,6 +17,13 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * The class {@code OrderCardCommand} implements command for ordering a new card for the user.
+ * <p>
+ * Forms {@code CardOrderData} and {@code AccOrderData} objects based on request parameters to order a new card.
+ *
+ * @author Maksim Zarutski
+ */
 public class OrderCardCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(OrderCardCommand.class);
@@ -44,9 +51,6 @@ public class OrderCardCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityActionService service = provider.getFacilityActionService();
-
         String owner = request.getParameter(PARAMETER_OWNER);
         String paymentSystem = request.getParameter(PARAMETER_PAYMENT_SYSTEM);
         String validity = request.getParameter(PARAMETER_VALIDITY);
@@ -73,6 +77,9 @@ public class OrderCardCommand implements Command {
         String page = GO_TO_CARD_ORDER_PAGE;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityActionService service = provider.getFacilityActionService();
+
             if (service.orderNewCard(cardData, accData)) {
                 page += PARAMETER_CARD_ORDER_SUCCESS;
             } else {
@@ -93,6 +100,12 @@ public class OrderCardCommand implements Command {
         return Date.valueOf(localDate);
     }
 
+    /**
+     * Forms {@code java.sql.Date} object representing card expiration date based on provided validity
+     *
+     * @param validity of the new card in months
+     * @return {@code java.sql.Date} card expiration date
+     */
     private Date getExpirationDate(String validity) {
         long validityMonth = Long.parseLong(validity);
 

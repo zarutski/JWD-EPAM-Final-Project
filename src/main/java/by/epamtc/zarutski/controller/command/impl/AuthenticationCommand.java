@@ -16,6 +16,13 @@ import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
 import by.epamtc.zarutski.service.exception.WrongDataServiceException;
 
+/**
+ * The class {@code AuthenticationCommand} implements command for user's authentication using login and password
+ * <p>
+ * Puts {@code AuthenticationData} object into {@code HttpSession} object in case of successful authentication.
+ *
+ * @author Maksim Zarutski
+ */
 public class AuthenticationCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AuthenticationCommand.class);
@@ -37,9 +44,6 @@ public class AuthenticationCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        UserService service = provider.getUserService();
-
         String login = request.getParameter(PARAMETER_LOGIN);
         String password = request.getParameter(PARAMETER_PASSWORD);
 
@@ -47,6 +51,9 @@ public class AuthenticationCommand implements Command {
         String page;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            UserService service = provider.getUserService();
+
             authenticationData = service.authentication(login, password);
 
             if (authenticationData == null) {

@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToPaymentsCommand} implements navigation to the payments page.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToPaymentsCommand implements Command {
 
     private static final String PAYMENTS_PAGE = "/WEB-INF/jsp/payments.jsp";

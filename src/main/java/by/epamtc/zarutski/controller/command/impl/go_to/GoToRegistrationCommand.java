@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToRegistrationCommand} implements navigation to registration page
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToRegistrationCommand implements Command {
 
     private static final String REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";

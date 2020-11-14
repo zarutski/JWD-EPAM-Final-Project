@@ -28,6 +28,14 @@ import java.util.concurrent.Executor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The class {@code ConnectionPool} provides an implementation
+ * to manage access to the {@code Connection} objects
+ *
+ * @author Maksim Zarutski
+ * @see DBResourceManager
+ * @see DBParameter
+ */
 public final class ConnectionPool {
 
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
@@ -47,8 +55,13 @@ public final class ConnectionPool {
     private static final ConnectionPool instance = new ConnectionPool();
     private static final int DEFAULT_POOL_SIZE = 5;
 
-    // available and given away queues
+    /**
+     * Queue of the available {@code Connection} objects
+     */
     private static BlockingQueue<Connection> connectionQueue;
+    /**
+     * Queue of the given away {@code Connection} objects
+     */
     private static BlockingQueue<Connection> givenAwayConQueue;
 
     private final String driverName;
@@ -57,6 +70,9 @@ public final class ConnectionPool {
     private final String password;
     private int poolSize;
 
+    /**
+     * Constructs connection pool object, initializing with initial parameters
+     */
     private ConnectionPool() {
         DBResourceManager dbResourceManager = DBResourceManager.getInstance();
         this.driverName = dbResourceManager.getValue(DBParameter.DB_DRIVER);
@@ -76,6 +92,9 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Initialization of the queues with {@code PooledConnection} objects
+     */
     public void initPoolData() throws ConnectionPoolException {
         try {
             Class.forName(driverName);
@@ -95,6 +114,11 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * {@code ConnectionPool} instance access point
+     *
+     * @return instance of the {@code ConnectionPool} class
+     */
     public static ConnectionPool getInstance() {
         return instance;
     }
@@ -218,8 +242,12 @@ public final class ConnectionPool {
         }
     }
 
-    // decorates standard jdbc Connection class, changing default behavior for close() method
-    // for removing and offering connections using queues
+    /**
+     * Wrapper {@code PooledConnection} class for {@code Connection}
+     * <p>
+     * Changes default behavior for the close() method to removing and offering
+     * connection instances using queues
+     */
     private class PooledConnection implements Connection {
 
         private static final String ALLOCATING_CONN_ERROR = "Error allocating connection in the pool";

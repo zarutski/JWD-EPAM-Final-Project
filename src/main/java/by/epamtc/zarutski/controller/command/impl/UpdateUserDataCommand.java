@@ -2,7 +2,7 @@ package by.epamtc.zarutski.controller.command.impl;
 
 import by.epamtc.zarutski.bean.UpdateUserData;
 import by.epamtc.zarutski.controller.command.Command;
-import by.epamtc.zarutski.controller.validation.UserValidation;
+import by.epamtc.zarutski.controller.validation.UserValidator;
 import by.epamtc.zarutski.service.ServiceProvider;
 import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
@@ -15,6 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code UpdateUserDataCommand} implements command to change some of the user's data.
+ * <p>
+ * Forms {@code UpdateUserData} object based on request parameters.
+ * Performs operation only if user's new data passed validation.
+ *
+ * @author Maksim Zarutski
+ */
 public class UpdateUserDataCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(UpdateUserDataCommand.class);
@@ -58,12 +66,11 @@ public class UpdateUserDataCommand implements Command {
         userData.setAddress(address);
         userData.setPostCode(postCode);
 
-        if (UserValidation.isUserDataExists(userData)) {
-
-            ServiceProvider provider = ServiceProvider.getInstance();
-            UserService service = provider.getUserService();
-
+        if (UserValidator.isUserDataExists(userData)) {
             try {
+                ServiceProvider provider = ServiceProvider.getInstance();
+                UserService service = provider.getUserService();
+
                 service.updateUser(userData);
                 logger.info(LOG_SUCCESSFUL);
             } catch (WrongDataServiceException e) {

@@ -3,6 +3,11 @@ package by.epamtc.zarutski.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The class {@code TransferData} represents entity for storing data obout bank transfer operation
+ *
+ * @author Maksim Zarutski
+ */
 public class TransferData implements Serializable {
 
     private static final long serialVersionUID = -8749308504470687411L;

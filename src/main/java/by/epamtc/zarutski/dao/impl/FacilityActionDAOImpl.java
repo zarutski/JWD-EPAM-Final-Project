@@ -14,6 +14,11 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.time.LocalDate;
 
+/**
+ * The class {@code FacilityActionDAOImpl} provides implementation of the {@code FacilityActionDAO} interface
+ *
+ * @author Maksim Zarutski
+ */
 public class FacilityActionDAOImpl implements FacilityActionDAO {
 
     private static final Logger logger = LogManager.getLogger(FacilityActionDAOImpl.class);
@@ -104,6 +109,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
     private static final String LOG_ERROR_FETCHING_DATA = "DB error during fetching user data";
     private static final String LOG_DB_TRANSFER_ERROR = "DB error during transfer";
     private static final String LOG_WRONG_ORDER_DATA = "wrong card order data";
+    private static final String LOG_WRONG_TRANSFER_DATA = "wrong transfer data";
 
     @Override
     public boolean transfer(TransferData transferData) throws DAOException {
@@ -117,15 +123,16 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         long amountAfterTransfer = senderAccAmount - transferAmount;
         String senderCurrency = transferData.getTransferCurrency();
         String destinationNumber = transferData.getDestinationNumber();
-        String destinationAccNumber = getDestAccNumber(transferData);
-        int senderCardId = getSenderCardId(transferData);
         Timestamp operationDate = new Timestamp(System.currentTimeMillis());
+        // invokes private method getSenderCardId(TransferData transferData)
+        int senderCardId = getSenderCardId(transferData);
 
+        // gets destination account objets
+        String destinationAccNumber = getDestAccNumber(transferData);
+        Account destinationAccount = getAccByNumber(destinationAccNumber);
 
         // destination operation data (if in DB)
-        Account destinationAccount = getAccByNumber(destinationAccNumber);
         boolean destinationAccInDB = false;
-
         int destinationAccId = 0;
         long destinationAccAmount = -1;
         String destAccCurrency = null;
@@ -230,6 +237,9 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
                     transferSuccessful = true;
                 }
 
+            } catch (SQLIntegrityConstraintViolationException e) {
+                logger.error(LOG_WRONG_TRANSFER_DATA, e);
+                throw new WrongDataDAOException(e);
             } catch (ConnectionPoolException e) {
                 logger.error(LOG_CONNECTION_POOL_ERROR, e);
                 throw new DAOException(e);
@@ -372,10 +382,22 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         }
     }
 
-    // receives destination account number from TransferData
-    // если перевод совершается со счёта на счёт, то возвращает значение destinationNumber объекта TransferData
-    // если перевод совершается между картами, то значеине destinationNumber объекта TransferData - это номер карты получателя
-    // чтобы получить номер подключённого к карте счёта, внутри вызывается метод getAccByCardNumber
+    /**
+     * Receives destination account number using destination number value from {@code TransferData} object
+     * <p>
+     * If the transfer is made from account to account, then it returns
+     * the destinationNumber value of the TransferData object
+     * <p>
+     * If the transfer is made between cards, then the destinationNumber
+     * of the TransferData object is the recipient's card number
+     * <p>
+     * To get the number of the account connected to the card,
+     * the getAccByCardNumber() method is called inside
+     *
+     * @param transferData {@code TransferData} object contains data about transfer to perform
+     * @return {@code String} is a number of the destination account
+     * @throws DAOException if an error occurs in the process of the method getAccNumberByCardNumber()
+     */
     private String getDestAccNumber(TransferData transferData) throws DAOException {
 
         String receivedNumber = transferData.getDestinationNumber();
@@ -394,8 +416,17 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         return destNumber;
     }
 
-    // метод getAccByCardNumber находит список подключённых к карте счётов и возвращает номер наиболее подходящего счёта
-    // если не будет найден счёт, с нужной валютой - метод вернёт номер первого найденного счёта
+    /**
+     * Method finds the list of accounts connected to the card and returns the number of the most suitable account
+     * <p>
+     * If no account is found with the required currency - the method
+     * will return the number of the first found account
+     *
+     * @param cardNumber by which the account is searched
+     * @param currency   of the transaction
+     * @return {@code String} account number connected to the requested card
+     * @throws DAOException if an error occurs during fetching account number from DB
+     */
     private String getAccNumberByCardNumber(String cardNumber, String currency) throws DAOException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -435,7 +466,14 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         return accNumber;
     }
 
-    // если трансфер выполняется со счёта, то вызывается метод getCardIdByAccountId чтобы получить id карты по id счёта
+    /**
+     * If the transfer is performed from an account, then the getCardIdByAccountId() method
+     * is called to get the card id by the account id
+     *
+     * @param transferData {@code TransferData} object contains data about transfer to perform
+     * @return id of the sender's card
+     * @throws DAOException if an error occurs in the process of the method getSenderAccountId()
+     */
     private int getSenderCardId(TransferData transferData) throws DAOException {
         if (transferFromCard(transferData)) {
             return transferData.getSenderCardId();
@@ -445,8 +483,17 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         }
     }
 
-    // формирует объект класса Account на основании данных, полученных из select для указанного destinationNumber
-    private Account getAccByNumber(String destinationNumber) throws DAOException {
+    /**
+     * Forms an object of the {@code Account} class based on the data
+     * received from DB for the specified account number
+     * <p>
+     * Returns null value if account with specified number wasn't found in DB
+     *
+     * @param accountNumber is a number of the requested account
+     * @return {@code Account} object containing data of the requested account
+     * @throws DAOException if an error occurs during fetching data from DB
+     */
+    private Account getAccByNumber(String accountNumber) throws DAOException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
@@ -455,7 +502,7 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         try {
             con = connectionPool.takeConnection();
             ps = con.prepareStatement(SELECT_USER_ACCOUNT + WHERE_ACC_NUMBER);
-            ps.setString(1, destinationNumber);
+            ps.setString(1, accountNumber);
 
             resultSet = ps.executeQuery();
 
@@ -475,7 +522,6 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
                 account.setAmount(amount);
                 account.setCurrency(currency);
                 account.setState(state);
-
             }
 
         } catch (ConnectionPoolException e) {
@@ -496,8 +542,15 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         return transferFrom.equals(TRANSFER_FROM_CARD);
     }
 
-    // если доступ к счёту имеет несколько карт, метод возвращает id первой карты из выборки
-    // это допустимо т.к. валюта, в которой выполняются операции определяется счётом, а не картой
+    /**
+     * If several cards have access to the account, the method returns the id
+     * of the first card from the selection. This is allowed because the currency
+     * in which operations are performed is determined by the account, not by the card
+     *
+     * @param accId is the account identifier for which the matching card is searched
+     * @return identifier of the card connected to the specified account
+     * @throws DAOException if an error occurs during fetching data from DB
+     */
     private int getCardIdByAccountId(int accId) throws DAOException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -528,8 +581,20 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         return cardId;
     }
 
-    // возвращает true, если счёт получателя принадлежит стороннему банку (подразумевает использование API другого банка)
-    // если счёт получателя пренадлежит банку, метод возвращает true если валюты счетов совпадают
+    /**
+     * Checks if the transfer can be performed
+     * <p>
+     * Returns true if the beneficiary's account belongs to a third-party bank
+     * (implies using the API of another bank)
+     * <p>
+     * If the beneficiary's account belongs to the bank, the method
+     * will return true if the currencies of the accounts match
+     *
+     * @param banksClient    is a boolean value that defines
+     * @param senderCurrency of the sender's account
+     * @param destCurrency   of the destination account
+     * @return boolean value that indicates if the transfer can be performed
+     */
     private boolean canPerform(boolean banksClient, String senderCurrency, String destCurrency) {
         if (!banksClient) {
             return true;
@@ -569,8 +634,16 @@ public class FacilityActionDAOImpl implements FacilityActionDAO {
         return userDetailsId;
     }
 
-    // если трансфер выполняется с использованием карты, возвращает true
-    // при совпадении полученного cvv кода со значением, хранящимся в БД
+    /**
+     * Checks the coincidence of the received cvv code with the value stored in the database
+     * <p>
+     * If the transfer is performed using a card, returns true if
+     * the received cvv code matches the value stored in the database
+     *
+     * @param transferData {@code TransferData} object contains data about transfer to perform
+     * @param senderCardID is the identifier of the sender's card
+     * @throws DAOException if an error occurs during fetching data from DB
+     */
     private void checkConfirmationCode(TransferData transferData, int senderCardID) throws DAOException {
         if (transferFromCard(transferData)) {
             String confirmationCode = transferData.getConfirmationCode();

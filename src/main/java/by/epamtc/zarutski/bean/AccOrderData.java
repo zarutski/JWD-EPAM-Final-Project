@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
+/**
+ * The class {@code AccOrderData} represents entity for account order's data
+ *
+ * @author Maksim Zarutski
+ */
 public class AccOrderData implements Serializable {
 
     private static final long serialVersionUID = 4719634179961126543L;

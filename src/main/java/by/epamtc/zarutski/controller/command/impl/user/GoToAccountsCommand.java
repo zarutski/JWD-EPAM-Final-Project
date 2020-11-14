@@ -15,6 +15,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code GoToAccountsCommand} implements navigation to the user's accounts page.
+ * <p>
+ * Requests data and forms a new request containing list of the user's accounts.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToAccountsCommand implements Command {
 
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
@@ -38,13 +45,13 @@ public class GoToAccountsCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityService service = provider.getFacilityService();
-
         int userId = authenticationData.getUserId();
         List<Account> usersAccounts = null;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityService service = provider.getFacilityService();
+
             usersAccounts = service.getAccounts(userId, DESTINATION_USER);
 
             if (usersAccounts == null || usersAccounts.isEmpty()) {
@@ -64,6 +71,12 @@ public class GoToAccountsCommand implements Command {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Get destination page based on the action from user's request
+     *
+     * @param action parameter from user's request
+     * @return target page that needs accounts list
+     */
     private String getActionPage(String action) {
         String page = null;
         if (ACTION_PAYMENT.equals(action)) {

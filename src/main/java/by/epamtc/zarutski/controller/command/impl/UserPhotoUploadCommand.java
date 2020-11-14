@@ -19,6 +19,13 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.List;
 
+/**
+ * The class {@code UserPhotoUploadCommand} implements command to upload user's photo.
+ * <p>
+ * Gets {@code FileItem} object from user's request, if such an object exists.
+ *
+ * @author Maksim Zarutski
+ */
 public class UserPhotoUploadCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(UserPhotoUploadCommand.class);
@@ -39,13 +46,13 @@ public class UserPhotoUploadCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        UserService service = provider.getUserService();
         String page = GO_TO_PERSONAL_AREA;
 
         if (ServletFileUpload.isMultipartContent(request)) {
-
             try {
+                ServiceProvider provider = ServiceProvider.getInstance();
+                UserService service = provider.getUserService();
+
                 FileItem item = getPhotoItem(request);
                 int userId = authenticationData.getUserId();
 

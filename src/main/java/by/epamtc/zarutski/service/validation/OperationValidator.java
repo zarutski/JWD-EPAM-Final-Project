@@ -2,6 +2,11 @@ package by.epamtc.zarutski.service.validation;
 
 import by.epamtc.zarutski.bean.TransferData;
 
+/**
+ * The class {@code OperationValidator} validates the {@code TransferData} object's data
+ *
+ * @author Maksim Zarutski
+ */
 public class OperationValidator {
 
     private static final String ACC_PATTERN = "^([a-zA-z]|[0-9]){24}$";
@@ -11,6 +16,17 @@ public class OperationValidator {
     private static final String TRANSFER_FROM_CARD = "card";
     public static final String CARD_STATE_BLOCKED = "заблокирована";
 
+    /**
+     * Checks if {@code TransferData} object's data is valid
+     * <p>
+     * Returns false if transfer's amount is bigger than account's available funds
+     * <p>
+     * Validates possibility of the operation when making
+     * a transfer from card to card, or from account to account
+     *
+     * @param transferData containing data for performing transfer
+     * @return boolean value indicating that transfer data is valid
+     */
     public static boolean transferDataValidation(TransferData transferData) {
         String transferFrom = transferData.getTransferFrom();
 
@@ -27,6 +43,16 @@ public class OperationValidator {
         }
     }
 
+    /**
+     * Validates possibility of the operation when making a transfer from card to card
+     * <p>
+     * Returns false value if sender's and destination numbers are matching
+     * Returns false value if sender's card is blocked
+     * Returns true if certain fields are matching certain patterns
+     *
+     * @param transferData containing data for performing transfer
+     * @return boolean value indicating that transfer data is valid
+     */
     private static boolean validateCardTransfer(TransferData transferData) {
         String currency = transferData.getTransferCurrency();
         String accNumber = transferData.getSenderAccNumber();
@@ -44,6 +70,15 @@ public class OperationValidator {
                 && confirmationCode.matches(CONFIRMATION_CODE_PATTERN);
     }
 
+    /**
+     * Validates possibility of the operation when making a transfer from account to account
+     * <p>
+     * Returns false value if sender's and destination numbers are matching
+     * Returns true if certain fields are matching certain patterns
+     *
+     * @param transferData containing data for performing transfer
+     * @return boolean value indicating that transfer data is valid
+     */
     private static boolean validateAccTransfer(TransferData transferData) {
         String accNumber = transferData.getSenderAccNumber();
         String destinationNumber = transferData.getDestinationNumber();

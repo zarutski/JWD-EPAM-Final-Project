@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * The class {@code Account} represents entity for user's account
+ *
+ * @author Maksim Zarutski
+ */
 public class Account implements Serializable {
 
     private static final long serialVersionUID = -5441011950755538654L;

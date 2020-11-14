@@ -9,6 +9,15 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * The class {@code LocalizationCommand} implements change of an app language
+ * <p>
+ * Gets parameter{@value PARAMETER_LOCALE} of target locale from request.
+ * Puts locale parameter into {@code HttpSession} object as an attribute,
+ * and redirects user to previous page.
+ *
+ * @author Maksim Zarutski
+ */
 public class LocalizationCommand implements Command {
 
     private final static String PARAMETER_LOCALE = "local";

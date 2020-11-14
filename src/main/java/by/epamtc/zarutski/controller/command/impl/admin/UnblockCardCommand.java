@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code UnblockCardCommand} implements command to unblock user's card.
+ * <p>
+ * Uses user id and new card state from request in order to change card state.
+ *
+ * @author Maksim Zarutski
+ */
 public class UnblockCardCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(UnblockCardCommand.class);
@@ -33,9 +40,6 @@ public class UnblockCardCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityActionService service = provider.getFacilityActionService();
-
         String cardIdParameter = request.getParameter(PARAMETER_CARD_ID);
         String cardStateParameter = request.getParameter(PARAMETER_CARD_STATE);
         int cardId = Integer.parseInt(cardIdParameter);
@@ -46,6 +50,9 @@ public class UnblockCardCommand implements Command {
         page += cardIdParameter + PARAMETER_USER_ID + parameterUserId;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityActionService service = provider.getFacilityActionService();
+
             service.changeCardState(cardId, cardState);
             logger.info(LOG_SUCCESSFUL_START + cardId + LOG_SUCCESSFUL_END);
         } catch (WrongDataServiceException e) {

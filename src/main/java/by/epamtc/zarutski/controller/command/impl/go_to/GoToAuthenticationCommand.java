@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToAuthenticationCommand} implements navigation to the authentication page
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToAuthenticationCommand implements Command {
 
     private static final String AUTHENTICATION_PAGE = "/WEB-INF/jsp/authentication.jsp";

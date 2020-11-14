@@ -4,6 +4,14 @@ import by.epamtc.zarutski.bean.RegistrationData;
 import by.epamtc.zarutski.bean.UpdateUserData;
 import org.apache.commons.fileupload.FileItem;
 
+/**
+ * The class {@code ParametersValidator} validates user's operations data
+ * Uses regex values was read from .property file for fields patterns
+ *
+ * @author Maksim Zarutski
+ * @see RegexResourceManager
+ * @see RegexParameter
+ */
 public class ParametersValidator {
 
     private static final String EMAIL_PATTERN;
@@ -43,6 +51,13 @@ public class ParametersValidator {
         return phoneNumber.matches(PHONE_NUMBER_PATTERN);
     }
 
+    /**
+     * Checks if the {@code FileItem} object's extension
+     * is matching {@value EXTENSION_JPG} or {@value EXTENSION_PNG}
+     *
+     * @param item is a {@code FileItem} contains user's photo to upload
+     * @return boolean value indicating that {@code FileItem} has a valid extension
+     */
     public static boolean extensionValidation(FileItem item) {
         String format = null;
         String fileName = item.getName();

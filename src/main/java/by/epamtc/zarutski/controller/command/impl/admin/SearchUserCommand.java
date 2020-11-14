@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code SearchUserCommand} implements command for search of the user by received search query.
+ * <p>
+ * Search query may contain user name or surname part, or passport number.
+ *
+ * @author Maksim Zarutski
+ */
 public class SearchUserCommand implements Command {
 
     private static final String PARAMETER_SEARCH_REQUEST = "search_request";
@@ -27,13 +34,13 @@ public class SearchUserCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        UserService service = provider.getUserService();
-
         String searchRequest = request.getParameter(PARAMETER_SEARCH_REQUEST);
         List<UserData> users = null;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            UserService service = provider.getUserService();
+
             users = service.findUsers(searchRequest);
 
             if (users == null || users.isEmpty()) {

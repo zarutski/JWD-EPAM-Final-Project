@@ -15,6 +15,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code GoToCardsCommand} implements navigation to the user's cards page.
+ * <p>
+ * Requests data and forms a new request containing list of the user's cards.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToCardsCommand implements Command {
 
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
@@ -33,16 +40,17 @@ public class GoToCardsCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityService service = provider.getFacilityService();
 
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
 
         int userId = authenticationData.getUserId();
-
         List<Card> usersCards = null;
+
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityService service = provider.getFacilityService();
+
             usersCards = service.getUserCards(userId);
 
             if (usersCards == null || usersCards.isEmpty()) {
@@ -62,6 +70,12 @@ public class GoToCardsCommand implements Command {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Get destination page based on the action from user's request
+     *
+     * @param action parameter from user's request
+     * @return target page that needs cards list
+     */
     private String getActionPage(String action) {
         String page = null;
         if (ACTION_PAYMENT.equals(action)) {

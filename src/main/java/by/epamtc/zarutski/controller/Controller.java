@@ -11,6 +11,11 @@ import by.epamtc.zarutski.controller.command.Command;
 import by.epamtc.zarutski.controller.command.CommandProvider;
 import by.epamtc.zarutski.controller.command.ParameterName;
 
+/**
+ * The class {@code Controller} represents a servlet implementation for executing client's requests
+ *
+ * @author Maksim Zarutski
+ */
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +39,16 @@ public class Controller extends HttpServlet {
         process(request, response);
     }
 
+    /**
+     * Takes and executes target command from the client's request
+     * <p>
+     * Sets previous executed command as a {@code HttpSession} attribute
+     *
+     * @param req  the {@code ServletRequest} object contains client's request
+     * @param resp the {@code ServletResponse} object contains server's response
+     * @throws ServletException if an error occurs during executing servlet's code
+     * @throws IOException      if an IO error occurs during performing IO operations
+     */
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 

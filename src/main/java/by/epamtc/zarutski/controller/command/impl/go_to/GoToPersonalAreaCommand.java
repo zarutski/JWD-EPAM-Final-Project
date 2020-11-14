@@ -15,6 +15,13 @@ import by.epamtc.zarutski.service.ServiceProvider;
 import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
 
+/**
+ * The class {@code GoToPersonalAreaCommand} implements navigation to the user's personal area page.
+ * <p>
+ * Requests user's data by user id from request.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToPersonalAreaCommand implements Command {
 
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";
@@ -31,13 +38,13 @@ public class GoToPersonalAreaCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(PARAMETER_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        UserService service = provider.getUserService();
-
         int userId = authenticationData.getUserId();
         UserData userData = null;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            UserService service = provider.getUserService();
+
             userData = service.getUserData(userId);
 
             if (userData != null) {

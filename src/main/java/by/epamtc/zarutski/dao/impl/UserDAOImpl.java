@@ -29,6 +29,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * The class {@code UserDAOImpl} provides implementation of the {@code FacilityDAO} interface
+ *
+ * @author Maksim Zarutski
+ */
 public class UserDAOImpl implements UserDAO {
 
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
@@ -160,7 +165,7 @@ public class UserDAOImpl implements UserDAO {
             con = connectionPool.takeConnection();
             con.setAutoCommit(false);
 
-            // инсерт в первую таблицу
+            // insert into table
             insertUserDetailsStatement = con.prepareStatement(INSERT_INTO_USER_DETAILS, Statement.RETURN_GENERATED_KEYS);
 
             insertUserDetailsStatement.setString(1, registrationData.getName());
@@ -183,7 +188,7 @@ public class UserDAOImpl implements UserDAO {
             }
 
 
-            // получить сгенерированный ключ, затем произвести ещё одну вставку
+            // get the generated key, then do another insert
             int userDetailsId = extractGeneratedId(insertUserDetailsStatement);
             insertUsersStatement = con.prepareStatement(INSERT_INTO_USERS); // инсерт во вторую таблицу
 
@@ -392,6 +397,13 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * A method that hashes received the password using salt calculated from fetched password
+     *
+     * @param password        to be hashed
+     * @param fetchedPassword hashed password fetched from DB
+     * @return {@code String} represents hashed value
+     */
     private String hashPassword(String password, String fetchedPassword) {
         String salt = fetchedPassword.substring(0, SALT_LENGTH);
         return BCrypt.hashpw(password, salt);

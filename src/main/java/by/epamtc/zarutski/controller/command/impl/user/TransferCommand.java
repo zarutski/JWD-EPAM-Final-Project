@@ -16,6 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code TransferCommand} implements command for performing transfer between cards or accounts
+ * <p>
+ * Forms {@code TransferData} object based on request parameters.
+ * Determines transfer source and target page, based on the {@value TRANSFER_FROM_CARD} parameter.
+ *
+ * @author Maksim Zarutski
+ */
 public class TransferCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(TransferCommand.class);
@@ -59,10 +67,10 @@ public class TransferCommand implements Command {
 
         if (TransferDataValidator.isDataExists(transferData)) {
 
-            ServiceProvider provider = ServiceProvider.getInstance();
-            FacilityActionService service = provider.getFacilityActionService();
-
             try {
+                ServiceProvider provider = ServiceProvider.getInstance();
+                FacilityActionService service = provider.getFacilityActionService();
+
                 if (service.transfer(transferData)) {
                     logger.info(LOG_TRANSFER_SUCCESSFUL);
                     page += PARAMETER_PAYMENT_SUCCESSFUL;
@@ -77,6 +85,7 @@ public class TransferCommand implements Command {
             } catch (ServiceException e) {
                 page += PARAMETER_SERVICE_ERROR;
             }
+
         } else {
             logger.info(LOG_WRONG_TRANSFER_DATA);
             page += PARAMETER_INPUT_DATA_FORMAT;
@@ -85,6 +94,12 @@ public class TransferCommand implements Command {
         response.sendRedirect(page);
     }
 
+    /**
+     * Forms {@code TransferData} object based on request parameters
+     *
+     * @param request contains data for forming {@code TransferData} object
+     * @return {@code TransferData} object
+     */
     private TransferData formTransferData(HttpServletRequest request) {
         TransferData transferData = new TransferData();
 
@@ -107,12 +122,26 @@ public class TransferCommand implements Command {
         return transferData;
     }
 
-    private long getDBFormatAmount(HttpServletRequest request, String fieldName) {
-        double amountInput = Double.parseDouble(request.getParameter(fieldName));
+    /**
+     * Method performs converting value of double from user's request
+     * to db format by using {@value DB_FORMAT_AMOUNT_MULTIPLIER}
+     *
+     * @param request             object contains double value for amount
+     * @param amountParameterName parameter contains
+     * @return amount value converted to db amount format
+     */
+    private long getDBFormatAmount(HttpServletRequest request, String amountParameterName) {
+        double amountInput = Double.parseDouble(request.getParameter(amountParameterName));
         amountInput = amountInput * DB_FORMAT_AMOUNT_MULTIPLIER;
         return (long) amountInput;
     }
 
+    /**
+     * Method adds information about sender's card in case the transfer is made using a bank card
+     *
+     * @param transferData object that needs to be supplemented in case of transfer from a card
+     * @param request      object may contain information about card transfer
+     */
     private void addSenderCardData(TransferData transferData, HttpServletRequest request) {
         String transferFrom = transferData.getTransferFrom();
 
@@ -129,6 +158,12 @@ public class TransferCommand implements Command {
         }
     }
 
+    /**
+     * Forms target page, based on the {@value TRANSFER_FROM_CARD} parameter.
+     *
+     * @param transferData object to define a target page
+     * @return target page containing id of the transfer's source
+     */
     private String getDestinationPage(TransferData transferData) {
         String transferFrom = transferData.getTransferFrom();
         int senderCardId = transferData.getSenderCardId();

@@ -3,6 +3,11 @@ package by.epamtc.zarutski.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The class {@code OperationDetail} represents entity for details about the performed operation
+ *
+ * @author Maksim Zarutski
+ */
 public class OperationDetail implements Serializable {
 
     private static final long serialVersionUID = 3947781484493285194L;

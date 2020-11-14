@@ -17,6 +17,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code GoToAccountDetailsCommand} implements navigation to the account's details page.
+ * <p>
+ * Requests data and forms a new request containing data about
+ * certain account and operations performed for this account.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToAccountDetailsCommand implements Command {
 
     private static final String ACC_DETAILS_PAGE = "/WEB-INF/jsp/accountDetails.jsp";
@@ -46,9 +54,6 @@ public class GoToAccountDetailsCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(SESSION_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityService service = provider.getFacilityService();
-
         int accId = Integer.parseInt(request.getParameter(PARAMETER_ACC_ID));
         int userId = getUserId(authenticationData, request);
         Account account = null;
@@ -57,6 +62,9 @@ public class GoToAccountDetailsCommand implements Command {
         String page = getActionPage(action);
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityService service = provider.getFacilityService();
+
             account = service.getAccById(accId, userId);
             setAccAttribute(request, account);
 
@@ -75,6 +83,12 @@ public class GoToAccountDetailsCommand implements Command {
         }
     }
 
+    /**
+     * Get destination page based on action from user's request
+     *
+     * @param action parameter from user's request
+     * @return target page that needs card details data
+     */
     private String getActionPage(String action) {
         String page = null;
         if (ACTION_PAYMENT.equals(action)) {
@@ -86,6 +100,15 @@ public class GoToAccountDetailsCommand implements Command {
         return page;
     }
 
+    /**
+     * Method returns the id of the user for admin. If authenticated user has user's role,
+     * method will return it's own id. Thus, the user will not be able to obtain information
+     * about account in the event that this account belongs to another person.
+     *
+     * @param authenticationData information obout authenticated user
+     * @param request            request from user
+     * @return user's id based on the authentication data
+     */
     private int getUserId(AuthenticationData authenticationData, HttpServletRequest request) {
         if (authenticationData.getUserRole().equals(ROLE_ADMIN)) {
             String userIdParameter = request.getParameter(PARAMETER_USER_ID);

@@ -9,6 +9,11 @@ import org.apache.commons.fileupload.FileItem;
 
 import java.util.List;
 
+/**
+ * The interface {@code UserService} of the service layer for user's operations
+ *
+ * @author Maksim Zarutski
+ */
 public interface UserService {
 
     AuthenticationData authentication(String login, String password) throws ServiceException;

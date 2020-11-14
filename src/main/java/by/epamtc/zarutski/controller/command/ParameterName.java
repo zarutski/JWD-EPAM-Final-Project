@@ -1,5 +1,10 @@
 package by.epamtc.zarutski.controller.command;
 
+/**
+ * The enum {@code ParameterName} containing implemented command's names
+ *
+ * @author Maksim Zarutski
+ */
 public enum ParameterName {
 
     LOGOUT,

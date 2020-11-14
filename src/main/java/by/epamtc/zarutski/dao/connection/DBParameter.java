@@ -1,5 +1,10 @@
 package by.epamtc.zarutski.dao.connection;
 
+/**
+ * The class {@code DBParameter} contains constants with keys for database properties
+ *
+ * @author Maksim Zarutski
+ */
 public final class DBParameter {
 
     private DBParameter() {
@@ -10,5 +15,4 @@ public final class DBParameter {
     public static final String DB_USER = "db.user";
     public static final String DB_PASSWORD = "db.password";
     public static final String DB_POLL_SIZE = "db.pool_size";
-
 }

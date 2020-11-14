@@ -8,11 +8,16 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * The class {@code CardTag} implements custom tag for displaying only part of the card number
+ *
+ * @author Maksim Zarutski
+ */
 public class CardTag extends TagSupport {
 
-	private static final long serialVersionUID = 1407419439301788426L;
+    private static final long serialVersionUID = 1407419439301788426L;
 
-	private static final Logger logger = LogManager.getLogger(CardTag.class);
+    private static final Logger logger = LogManager.getLogger(CardTag.class);
 
     private static final String MASK_NUMBER = "**** **** **** ";
     private static final String VISA_PREFIX = "4";
@@ -32,6 +37,14 @@ public class CardTag extends TagSupport {
         this.cardNumber = cardNumber;
     }
 
+    /**
+     * Writes out masked card number and card's payment system
+     * <p>
+     * Card's payment system is determined by the first digit of the card number
+     *
+     * @return {@value SKIP_BODY} reports that tag's body evaluation will be skipped
+     * @throws JspException if an error occurs while processing
+     */
     @Override
     public int doStartTag() throws JspException {
 

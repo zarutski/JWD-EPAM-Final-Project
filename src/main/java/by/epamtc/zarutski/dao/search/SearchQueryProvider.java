@@ -3,6 +3,12 @@ package by.epamtc.zarutski.dao.search;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class {@code SearchQueryProvider} that provides access
+ * to the search sql scripts based on search request
+ *
+ * @author Maksim Zarutski
+ */
 public class SearchQueryProvider {
 
     public static final String SELECT_USERDATA_BY_PASSPORT = "SELECT u.id, u.email, ud.surname, ud.name, " +
@@ -29,7 +35,14 @@ public class SearchQueryProvider {
         searchQueries.put(SearchPattern.BY_PASSPORT, SELECT_USERDATA_BY_PASSPORT);
     }
 
-    // gets search query for passport only if search request full matches passport pattern
+    /**
+     * Gets search query for passport only if search request full matches passport pattern
+     * <p>
+     * Otherwise method returns default search query
+     *
+     * @param searchRequest value is used to get corresponding search query
+     * @return {@code String} value containing search query
+     */
     public String getSearchQueryByDestination(String searchRequest) {
         String query = SELECT_USERDATA_BY_DEFAULT;
 
@@ -42,6 +55,11 @@ public class SearchQueryProvider {
         return query;
     }
 
+    /**
+     * {@code SearchQueryProvider} instance access point
+     *
+     * @return instance of the {@code SearchQueryProvider} class
+     */
     public static SearchQueryProvider getInstance() {
         return instance;
     }

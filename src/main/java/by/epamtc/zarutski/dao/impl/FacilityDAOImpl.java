@@ -15,6 +15,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class {@code FacilityDAOImpl} provides implementation of the {@code FacilityDAO} interface
+ *
+ * @author Maksim Zarutski
+ */
 public class FacilityDAOImpl implements FacilityDAO {
 
     private static final Logger logger = LogManager.getLogger(FacilityDAOImpl.class);
@@ -275,7 +280,6 @@ public class FacilityDAOImpl implements FacilityDAO {
     }
 
     private Account getAcc(int accountId, ResultSet resultSet) throws SQLException {
-        Account account = null;
 
         String accNumber = resultSet.getString(DB_ACC_NUMBER);
         long amount = resultSet.getLong(DB_ACC_AMOUNT);
@@ -283,7 +287,7 @@ public class FacilityDAOImpl implements FacilityDAO {
         String currency = resultSet.getString(DB_ACC_CURRENCY);
         String state = resultSet.getString(DB_ACC_STATE);
 
-        account = new Account();
+        Account account = new Account();
         account.setAccountId(accountId);
         account.setAccNumber(accNumber);
         account.setOpeningDate(openingDate);
@@ -294,6 +298,13 @@ public class FacilityDAOImpl implements FacilityDAO {
         return account;
     }
 
+
+    /**
+     * Gets sql query for receiving performed operation's data based on the destination
+     *
+     * @param destination is a {@code String} value of who will receive operation's data
+     * @return {@code String} value of the select query
+     */
     private String getOperationQueryByDestination(String destination) {
         String query = SELECT_OPERATIONS;
 

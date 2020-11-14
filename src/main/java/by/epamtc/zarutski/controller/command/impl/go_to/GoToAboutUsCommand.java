@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToAboutUsCommand} implements navigation to about us page
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToAboutUsCommand implements Command {
 
     private static final String ABOUT_US_PAGE = "/WEB-INF/jsp/aboutUs.jsp";

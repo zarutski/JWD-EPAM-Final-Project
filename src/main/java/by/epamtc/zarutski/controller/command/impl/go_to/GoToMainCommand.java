@@ -11,6 +11,14 @@ import javax.servlet.http.HttpSession;
 import by.epamtc.zarutski.bean.AuthenticationData;
 import by.epamtc.zarutski.controller.command.Command;
 
+/**
+ * The class {@code GoToMainCommand} implements navigation to the main page.
+ * <p>
+ * For non-authenticated user main page is the main.jsp page.
+ * For authenticated user main page is the personalArea.jsp page.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToMainCommand implements Command {
 
     private static final String PARAMETER_AUTHENTICATION_DATA = "authentication_data";

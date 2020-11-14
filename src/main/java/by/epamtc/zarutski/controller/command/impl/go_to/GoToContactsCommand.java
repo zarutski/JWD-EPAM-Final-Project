@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToContactsCommand} implements navigation to contacts page
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToContactsCommand implements Command {
 
     private static final String CONTACTS_PAGE = "/WEB-INF/jsp/contacts.jsp";

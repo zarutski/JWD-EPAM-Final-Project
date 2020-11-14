@@ -2,6 +2,12 @@ package by.epamtc.zarutski.service.impl.generation;
 
 import java.util.Random;
 
+/**
+ * The class {@code FacilityDataGenerator} provides generation
+ * of card number, account and cvv-code for a new card order
+ *
+ * @author Maksim Zarutski
+ */
 public class FacilityDataGenerator {
 
     private static final Random random = new Random();
@@ -23,7 +29,11 @@ public class FacilityDataGenerator {
     private static final int MASTERCARD_CODE = 5;
     private static final int VISA_CODE = 4;
 
-    // generate 3-digits cvv code
+    /**
+     * Generates 3-digits cvv code
+     *
+     * @return {@code String} value of the generated code
+     */
     public static String generateCvvCode() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < CVV_LENGTH; i++) {
@@ -34,13 +44,18 @@ public class FacilityDataGenerator {
         return builder.toString();
     }
 
-    /*
-        generated acc number has next format: "AABB CCCC DDDD EEEE FFFF FFFF FFFF" where:
-        AA - country code
-        BB - 2 control digits
-        CCCC - first 4 digits of bank's SWIFT-code
-        DDDD - balance account (FROM 3019 to 3199)
-        FFFF FFFF FFFF - personal acc number
+    /**
+     * Generates number of the user's account
+     * <p>
+     * Generated acc number has next format: AABB CCCC DDDD EEEE FFFF FFFF FFFF (no whitespaces)
+     * Where:
+     * AA - country code {@value COUNTRY_CODE}
+     * BB - 2 control digits
+     * CCCC - first 4 digits of bank's SWIFT-code {@value BANK_SWIFT_NUMBER}
+     * DDDD - balance account (FROM 3019 to 3199) {@value DEFAULT_BALANCE_ACC}
+     * FFFF FFFF FFFF - personal acc number
+     *
+     * @return {@code String} number of the generated account
      */
     public static String generateAccNum() {
         StringBuilder builder = new StringBuilder();
@@ -57,7 +72,11 @@ public class FacilityDataGenerator {
         return builder.toString();
     }
 
-    // generate 12-digits personal account number
+    /**
+     * Generates 12-digits personal account number
+     *
+     * @return generated {@code String} account number
+     */
     private static String generatePersonalAccNumber() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < PERSONAL_NUM_LENGTH; i++) {
@@ -68,7 +87,13 @@ public class FacilityDataGenerator {
         return builder.toString();
     }
 
-    // returns 2-digits calculated control code
+    /**
+     * Method generates 2-digits control code based on the account number
+     * and using separate code rates for each generated control digit
+     *
+     * @param personalNum is a generated 12-digit account number
+     * @return 2-digits control code
+     */
     private static String generateControlCode(String personalNum) {
         StringBuilder builder = new StringBuilder();
 
@@ -81,7 +106,14 @@ public class FacilityDataGenerator {
         return builder.toString();
     }
 
-    // calculate control digit based on personal account number by multiplying defined coefficients
+
+    /**
+     * Calculates control digit based on personal account number by multiplying defined coefficients
+     *
+     * @param personalNum is a generated 12-digit account number
+     * @param controlRate is an array containing certain multiplier for each of the personal number digits
+     * @return control digit value
+     */
     private static int getControlDigit(String personalNum, int[] controlRate) {
         int[] product = new int[PERSONAL_NUM_LENGTH];
 
@@ -98,12 +130,19 @@ public class FacilityDataGenerator {
         return DIGIT_BOUND - (productSum % DIGIT_BOUND);
     }
 
-    /*
-        generated card number has next format: "KLLL LLMM MMMM MMNN" where:
-        K - payment system international code
-        LLL LL - first 5 digits of bank's BIN-code
-        MM MMMM MM - last 8 digits of user's account number
-        NN - 2 control digits of an account
+    /**
+     * Generates number of the user's card
+     * <p>
+     * Generated card number has next format: KLLL LLMM MMMM MMNN (no whitespaces)
+     * Where:
+     * K - payment system international code
+     * LLL LL - first 5 digits of bank's BIN-code {@value BANK_BIN_CODE}
+     * MM MMMM MM - last 8 digits of user's account number
+     * NN - 2 control digits of an account number
+     *
+     * @param accNumber     is a generated 12-digit account number
+     * @param paymentSystem is a card's payment system user was choose
+     * @return {@code String} generated card number
      */
     public static String generateCardNum(String accNumber, String paymentSystem) {
         StringBuilder builder = new StringBuilder();
@@ -120,7 +159,12 @@ public class FacilityDataGenerator {
         return builder.toString();
     }
 
-    // get payment system's card code
+    /**
+     * Determines the payment system code based on the payment system value
+     *
+     * @param paymentSystem {@code String} value of the target payment system
+     * @return payment system code value
+     */
     private static int getPaymentSystemCode(String paymentSystem) {
         if (VISA.equals(paymentSystem)) {
             return VISA_CODE;

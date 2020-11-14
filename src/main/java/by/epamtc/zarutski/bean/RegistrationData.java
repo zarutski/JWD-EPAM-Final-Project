@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * The class {@code RegistrationData} represents entity for user's registration data
+ *
+ * @author Maksim Zarutski
+ */
 public class RegistrationData implements Serializable {
 
     private static final long serialVersionUID = 2770828135336584725L;

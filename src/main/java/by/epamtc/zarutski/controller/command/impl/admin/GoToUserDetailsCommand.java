@@ -16,6 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code GoToUserDetailsCommand} implements navigation to user's details page.
+ * <p>
+ * Requests data and forms a new request containing data about the user, as well as it's card and accounts
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToUserDetailsCommand implements Command {
 
     private static final String GO_TO_SEARCH_USER = "controller?command=go_to_search_user";
@@ -40,10 +47,6 @@ public class GoToUserDetailsCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityService facilityService = provider.getFacilityService();
-        UserService service = provider.getUserService();
-
         int userDetailsId = Integer.parseInt(request.getParameter(PARAMETER_USER_ID));
         String page = GO_TO_SEARCH_USER;
 
@@ -52,6 +55,10 @@ public class GoToUserDetailsCommand implements Command {
         UserData userData = null;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityService facilityService = provider.getFacilityService();
+            UserService service = provider.getUserService();
+
             usersAccounts = facilityService.getAccounts(userDetailsId, DESTINATION_USER);
             setAccAttribute(request, usersAccounts);
 

@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToSearchUserCommand} implements navigation to search user page
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToSearchUserCommand implements Command {
 
     private static final String SEARCH_USER_PAGE = "/WEB-INF/jsp/searchUser.jsp";

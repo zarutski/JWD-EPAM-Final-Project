@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+/**
+ * The class {@code Operation} is an entity for storing information about the performed operation
+ *
+ * @author Maksim Zarutski
+ */
 public class Operation implements Serializable {
 
     private static final long serialVersionUID = 7393408681746082352L;

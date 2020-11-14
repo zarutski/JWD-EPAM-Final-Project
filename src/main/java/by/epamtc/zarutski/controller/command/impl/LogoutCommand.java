@@ -12,6 +12,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * The class {@code LogoutCommand} implements command to logout user out of the system.
+ * <p>
+ * Removes {@code AuthenticationData} object from {@code HttpSession} object if session is initialized.
+ *
+ * @author Maksim Zarutski
+ */
 public class LogoutCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(LogoutCommand.class);

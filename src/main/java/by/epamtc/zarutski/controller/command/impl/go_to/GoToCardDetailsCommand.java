@@ -18,6 +18,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The class {@code GoToCardDetailsCommand} implements navigation to the card's details page.
+ * <p>
+ * Requests data and forms a new request containing data about certain card,
+ * connected accounts and operations performed for this card.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToCardDetailsCommand implements Command {
 
     private static final String CARD_DETAILS_PAGE = "/WEB-INF/jsp/cardDetails.jsp";
@@ -49,9 +57,6 @@ public class GoToCardDetailsCommand implements Command {
         HttpSession session = request.getSession();
         AuthenticationData authenticationData = (AuthenticationData) session.getAttribute(SESSION_AUTHENTICATION_DATA);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        FacilityService service = provider.getFacilityService();
-
         int cardId = Integer.parseInt(request.getParameter(PARAMETER_USER_CARD_ID));
         int userId = getUserId(authenticationData, request);
         List<Account> usersAccounts = null;
@@ -61,6 +66,9 @@ public class GoToCardDetailsCommand implements Command {
         String page = getActionPage(action);
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            FacilityService service = provider.getFacilityService();
+
             card = service.getCardById(cardId, userId);
             setCardAttribute(request, card);
 
@@ -82,10 +90,16 @@ public class GoToCardDetailsCommand implements Command {
         }
     }
 
-    // на основании данных аутентификации определяет, может ли пользователь просматривать карты другого пользователя
-    // если админ пытается получить доступ, то метод вовзращает id запрашиваемого пользователя
-    // если обычный пользователя пытается получить доступ, метод возвратит его собственный id а не запрашиваемый
-    // обычный пользователь может просмотреть детали своих карт, но не чужих
+    /**
+     * Method returns the id of the user for admin.
+     * If authenticated user has user's role, method will return it's own id.
+     * Thus, the user will not be able to obtain information about card
+     * in the event that this card belongs to another person.
+     *
+     * @param authenticationData information obout authenticated user
+     * @param request            request from user
+     * @return user's id based on the authentication data
+     */
     private int getUserId(AuthenticationData authenticationData, HttpServletRequest request) {
         if (authenticationData.getUserRole().equals(ROLE_ADMIN)) {
             String userIdParameter = request.getParameter(REQ_PARAMETER_USER_ID);
@@ -95,6 +109,12 @@ public class GoToCardDetailsCommand implements Command {
         }
     }
 
+    /**
+     * Get destination page based on action from user's request
+     *
+     * @param action parameter from user's request
+     * @return target page that needs card details data
+     */
     private String getActionPage(String action) {
         String page = null;
         if (ACTION_PAYMENT.equals(action)) {

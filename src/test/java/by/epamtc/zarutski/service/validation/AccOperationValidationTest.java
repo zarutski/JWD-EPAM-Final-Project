@@ -11,16 +11,27 @@ public class AccOperationValidationTest {
 
     private TransferData accTransfer;
 
+    private static final int SENDER_ACCOUNT_ID = 1;
+    private static final int SENDER_ACC_AMOUNT = 1000;
+    private static final String SENDER_ACC_NUMBER = "BY10UNBS3135301412345678";
+    private static final int TRANSFER_AMOUNT = 500;
+    private static final String TRANSFER_CURRENCY = "BYN";
+    private static final String DESTINATION_ACC_NUMBER = "BY12UNBS3078301434561278";
+    private static final String TRANSFER_FROM_ACC = "acc";
+    private static final int WRONG_TRANSFER_AMOUNT = 1001;
+    private static final String INVALID_ACC_NUMBER = "by300200100";
+    private static final String INVALID_CURRENCY_PATTERN = "byn belarus";
+
     @Before
-    public void setup(){
+    public void setup() {
         accTransfer = new TransferData();
-        accTransfer.setSenderAccountId(1);
-        accTransfer.setSenderAccAmount(1000);
-        accTransfer.setSenderAccNumber("BY10UNBS3135301412345678");
-        accTransfer.setTransferAmount(500);
-        accTransfer.setTransferCurrency("BYN");
-        accTransfer.setDestinationNumber("BY12UNBS3078301434561278");
-        accTransfer.setTransferFrom("acc");
+        accTransfer.setSenderAccountId(SENDER_ACCOUNT_ID);
+        accTransfer.setSenderAccAmount(SENDER_ACC_AMOUNT);
+        accTransfer.setSenderAccNumber(SENDER_ACC_NUMBER);
+        accTransfer.setTransferAmount(TRANSFER_AMOUNT);
+        accTransfer.setTransferCurrency(TRANSFER_CURRENCY);
+        accTransfer.setDestinationNumber(DESTINATION_ACC_NUMBER);
+        accTransfer.setTransferFrom(TRANSFER_FROM_ACC);
     }
 
     @Test
@@ -31,7 +42,7 @@ public class AccOperationValidationTest {
 
     @Test
     public void accTransferNegativeInsufficientFunds() {
-        accTransfer.setTransferAmount(1001);
+        accTransfer.setTransferAmount(WRONG_TRANSFER_AMOUNT);
         boolean actual = OperationValidator.transferDataValidation(accTransfer);
         assertFalse(actual);
     }
@@ -46,14 +57,14 @@ public class AccOperationValidationTest {
 
     @Test
     public void accTransferNegativeAccPattern() {
-        accTransfer.setSenderAccNumber("by300200100");
+        accTransfer.setSenderAccNumber(INVALID_ACC_NUMBER);
         boolean actual = OperationValidator.transferDataValidation(accTransfer);
         assertFalse(actual);
     }
 
     @Test
     public void accTransferNegativeCurrencyPattern() {
-        accTransfer.setTransferCurrency("byn belarus");
+        accTransfer.setTransferCurrency(INVALID_CURRENCY_PATTERN);
         boolean actual = OperationValidator.transferDataValidation(accTransfer);
         assertFalse(actual);
     }

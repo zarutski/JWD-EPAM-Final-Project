@@ -7,6 +7,11 @@ import by.epamtc.zarutski.service.exception.ServiceException;
 
 import java.util.List;
 
+/**
+ * The interface {@code FacilityService} of the service layer providing access to payment facilities information
+ *
+ * @author Maksim Zarutski
+ */
 public interface FacilityService {
 
     List<Card> getUserCards(int userId) throws ServiceException;

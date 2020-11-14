@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * The class {@code UserData} represents entity of user's data
+ *
+ * @author Maksim Zarutski
+ */
 public class UserData implements Serializable {
 
     private static final long serialVersionUID = 6899855851114675364L;

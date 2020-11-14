@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
+/**
+ * The class {@code CardOrderData} represents entity for user's card information
+ *
+ * @author Maksim Zarutski
+ */
 public class CardOrderData implements Serializable {
 
     private static final long serialVersionUID = -5741444076441329050L;

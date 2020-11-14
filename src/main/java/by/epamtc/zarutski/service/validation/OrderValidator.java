@@ -3,6 +3,16 @@ package by.epamtc.zarutski.service.validation;
 import by.epamtc.zarutski.bean.AccOrderData;
 import by.epamtc.zarutski.bean.CardOrderData;
 
+/**
+ * The class {@code OrderValidator} validates data to perform a card order
+ * <p>
+ * Checks if certain fields of the {@code CardOrderData} and
+ * {@code AccOrderData} objects are matching certain patterns
+ *
+ * @author Maksim Zarutski
+ * @see CardOrderData
+ * @see AccOrderData
+ */
 public class OrderValidator {
 
     private static final String ACC_PATTERN = "^([a-zA-z]|[0-9]){24}$";

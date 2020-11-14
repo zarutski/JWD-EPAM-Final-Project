@@ -1,5 +1,10 @@
 package by.epamtc.zarutski.service.validation;
 
+/**
+ * The class {@code RegexParameter} contains constants with keys for regex values properties
+ *
+ * @author Maksim Zarutski
+ */
 public final class RegexParameter {
 
     private RegexParameter() {

@@ -5,8 +5,21 @@ import by.epamtc.zarutski.bean.UpdateUserData;
 
 import java.time.LocalDate;
 
-public class UserValidation {
+/**
+ * The class {@code UserValidator} validates user's data
+ *
+ * @author Maksim Zarutski
+ */
+public class UserValidator {
 
+    private static final String DATE_OF_BIRTH_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$";
+
+    /**
+     * Checks if {@code RegistrationData} object's data is correct
+     *
+     * @param data the {@code RegistrationData} contains data to user's registration
+     * @return boolean value indicates that registration data is correct
+     */
     public static boolean isRegistrationDataExists(RegistrationData data) {
         if (data == null) {
             return false;
@@ -34,6 +47,12 @@ public class UserValidation {
                 phoneNumber, passportSeries, passportNumber, address, postcode);
     }
 
+    /**
+     * Checks if {@code UpdateUserData} object's data is correct
+     *
+     * @param data the {@code UpdateUserData} contains data to update user's data
+     * @return boolean value indicates that new user's data is correct
+     */
     public static boolean isUserDataExists(UpdateUserData data) {
         if (data == null) {
             return false;
@@ -48,6 +67,16 @@ public class UserValidation {
         String postcode = data.getPostCode();
 
         return isNullOrEmpty(name, surname, patronymic, phoneNumber, address, postcode);
+    }
+
+    /**
+     * Checks if {@code String} value of date is matches valid format to perform parsing
+     *
+     * @param date {@code String} value contains date to be parsed
+     * @return boolean value indicates that date's format is valid
+     */
+    public static boolean isValidDateFormat(String date) {
+        return (date != null) && date.matches(DATE_OF_BIRTH_PATTERN);
     }
 
     private static boolean isNullOrEmpty(String... values) {

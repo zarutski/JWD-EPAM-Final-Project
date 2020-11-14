@@ -3,6 +3,11 @@ package by.epamtc.zarutski.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The class {@code UpdateUserData} represents entity for storing information needed to update user's data
+ *
+ * @author Maksim Zarutski
+ */
 public class UpdateUserData implements Serializable {
 
     private static final long serialVersionUID = 234437362080808369L;

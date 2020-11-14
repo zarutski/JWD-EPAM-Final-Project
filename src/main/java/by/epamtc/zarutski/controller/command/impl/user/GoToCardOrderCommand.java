@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code GoToCardOrderCommand} implements navigation to the card order page.
+ *
+ * @author Maksim Zarutski
+ */
 public class GoToCardOrderCommand implements Command {
 
     private static final String ORDER_CARD_PAGE = "/WEB-INF/jsp/cardOrder.jsp";

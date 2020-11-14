@@ -14,13 +14,22 @@ import org.apache.logging.log4j.Logger;
 
 import by.epamtc.zarutski.bean.RegistrationData;
 import by.epamtc.zarutski.controller.command.Command;
-import by.epamtc.zarutski.controller.validation.UserValidation;
+import by.epamtc.zarutski.controller.validation.UserValidator;
 import by.epamtc.zarutski.service.ServiceProvider;
 import by.epamtc.zarutski.service.UserService;
 import by.epamtc.zarutski.service.exception.ServiceException;
 import by.epamtc.zarutski.service.exception.UserExistsServiceException;
 import by.epamtc.zarutski.service.exception.WrongDataServiceException;
 
+/**
+ * The class {@code RegistrationCommand} implements command for user's registration
+ * <p>
+ * Forms {@code RegistrationData} object based on request parameters.
+ * Performs operation only if passwords were input by users are matching
+ * and registration data passed validation.
+ *
+ * @author Maksim Zarutski
+ */
 public class RegistrationCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
@@ -42,7 +51,6 @@ public class RegistrationCommand implements Command {
     private static final String PARAMETER_POST_CODE = "post_code";
 
     private static final String DATE_FORMATTER_PATTERN = "yyyy-MM-d";
-    private static final String DATE_OF_BIRTH_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$";
 
     private static final String AMPERSAND = "&";
     private static final String PARAMETER_REGISTRATION_ERROR = "error=error_11";
@@ -83,7 +91,7 @@ public class RegistrationCommand implements Command {
             String date = request.getParameter(PARAMETER_DATE_OF_BIRTH);
             LocalDate dateOfBirth = null;
 
-            if (isValidDateFormat(date)) {
+            if (UserValidator.isValidDateFormat(date)) {
                 dateOfBirth = parseDate(date);
             }
 
@@ -104,12 +112,11 @@ public class RegistrationCommand implements Command {
             registrationData.setPostCode(postCode);
 
 
-            if (UserValidation.isRegistrationDataExists(registrationData)) {
-
-                ServiceProvider provider = ServiceProvider.getInstance();
-                UserService service = provider.getUserService();
-
+            if (UserValidator.isRegistrationDataExists(registrationData)) {
                 try {
+                    ServiceProvider provider = ServiceProvider.getInstance();
+                    UserService service = provider.getUserService();
+
                     if (service.registration(registrationData)) {
                         logger.info(LOG_REGISTRATION_SUCCESSFUL);
                         page = GO_TO_AUTHENTICATION_PAGE + AMPERSAND + MESSAGE_REG_SUCCESS;
@@ -133,10 +140,6 @@ public class RegistrationCommand implements Command {
         }
 
         response.sendRedirect(page);
-    }
-
-    private static boolean isValidDateFormat(String date) {
-        return (date != null) && date.matches(DATE_OF_BIRTH_PATTERN);
     }
 
     private LocalDate parseDate(String date) {

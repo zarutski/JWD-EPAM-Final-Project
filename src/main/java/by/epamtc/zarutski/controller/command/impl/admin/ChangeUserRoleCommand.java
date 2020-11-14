@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class {@code ChangeUserRoleCommand} implements command for change of the user's role
+ *
+ * @author Maksim Zarutski
+ */
 public class ChangeUserRoleCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ChangeUserRoleCommand.class);
@@ -35,11 +40,12 @@ public class ChangeUserRoleCommand implements Command {
         int userId = Integer.parseInt(userIdParameter);
         int roleCode = Integer.parseInt(roleCodeParameter);
 
-        ServiceProvider provider = ServiceProvider.getInstance();
-        UserService service = provider.getUserService();
         String page = GO_TO_USER_DETAILS + userId;
 
         try {
+            ServiceProvider provider = ServiceProvider.getInstance();
+            UserService service = provider.getUserService();
+
             service.changeUserRole(userId, roleCode);
             logger.info(LOG_SUCCESSFUL_START + userId + LOG_SUCCESSFUL_END + roleCode);
         } catch (WrongDataServiceException e) {

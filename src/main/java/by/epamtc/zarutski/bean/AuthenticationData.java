@@ -3,6 +3,11 @@ package by.epamtc.zarutski.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The class {@code AuthenticationData} represents entity for user's authentication data
+ *
+ * @author Maksim Zarutski
+ */
 public class AuthenticationData implements Serializable {
 
     private static final long serialVersionUID = -6826078765905106111L;
