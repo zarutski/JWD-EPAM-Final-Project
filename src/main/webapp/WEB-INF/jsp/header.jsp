@@ -9,7 +9,7 @@
 	
 	<title>E-payments</title>
 	<link rel="stylesheet" media="all" type="text/css" href="${pageContext.request.contextPath}/css/base.css">
-	<link href="${pageContext.request.contextPath}/img/testicon.png" rel="icon">
+	<link href="${pageContext.request.contextPath}/img/app-icon.png" rel="icon">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap" rel="stylesheet"> 
 	
 	<c:if test="${not empty sessionScope.local}">
